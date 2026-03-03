@@ -10,7 +10,16 @@
       startOnLoad: true,
       theme: 'dark',
       flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' },
-      themeVariables: { fontSize: '16px' }
+      themeVariables: {
+        fontSize: '16px',
+        primaryColor: '#1f2937',
+        primaryTextColor: '#e5e7eb',
+        primaryBorderColor: '#60a5fa',
+        lineColor: '#94a3b8',
+        tertiaryColor: '#0f172a',
+        clusterBkg: '#0b1220',
+        clusterBorder: '#334155'
+      }
     });
 
     function initPanZoom() {
@@ -121,6 +130,10 @@
     <div id="viewport">
     <pre class="mermaid">
 flowchart LR
+    classDef lane fill:#0b1220,stroke:#334155,stroke-width:1.5px,color:#cbd5e1;
+    classDef node fill:#1f2937,stroke:#60a5fa,stroke-width:1.5px,color:#f8fafc;
+    classDef decision fill:#111827,stroke:#f59e0b,stroke-width:2px,color:#fef3c7;
+
     subgraph IN[📩 Intake Lane]
       A[Message arrives]
       B[Parse metadata<br/>channel/reply/history]
@@ -183,6 +196,10 @@ flowchart LR
     M --> N
     P --> Q
     T --> U
+
+    class A,B,C,D,E,F,H,I,J,J0,K,L,M,N,O,P,Q,R,S,T,U,V,W node;
+    class G,K,N,U decision;
+    class IN,ID,MEM,SKILL,EXEC,OUT,LOG lane;
     </pre>
     </div>
   </div>
