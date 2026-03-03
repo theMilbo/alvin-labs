@@ -104,7 +104,7 @@
       </div>
       <div class="card">
         <div class="title">🎒 Owned Memecoins</div>
-        <div id="ownedMemecoins" class="small">Loading…</div>
+        <div id="ownedMemecoins" class="grid">Loading…</div>
       </div>
     </div>
   </section>
@@ -247,8 +247,21 @@ function render(levels, stats){
 
   const owned = stats.memecoins?.owned || [];
   document.getElementById('ownedMemecoins').innerHTML = owned.length
-    ? owned.map(x => `• <code>${x.mint}</code>${x.symbol ? ` (${x.symbol})` : ''} — amount: ${x.amount}`).join('<br>')
-    : 'No memecoins owned yet (or none detected).';
+    ? owned.map(x => {
+        const val = (typeof x.valueUsd === 'number') ? `$${x.valueUsd.toFixed(4)}` : 'n/a';
+        const px = (typeof x.priceUsd === 'number') ? `$${x.priceUsd.toFixed(8)}` : 'n/a';
+        const link = x.dexUrl ? `<a href="${x.dexUrl}" target="_blank" rel="noopener">DexScreener ↗</a>` : 'DexScreener n/a';
+        return `<div class='card'>
+          <div class='title'>${x.symbol || 'MEME'} </div>
+          <div class='small'><code>${x.mint}</code></div>
+          <div class='small'>Amount: <strong>${x.amount}</strong></div>
+          <div class='small'>Price: <strong>${px}</strong></div>
+          <div class='small'>Value: <strong>${val}</strong></div>
+          <div class='small'>${link}</div>
+        </div>`;
+      }).join('')
+    : '<div class="small">No memecoins owned yet (or none detected).</div>';
+
 
   document.getElementById('stamp').textContent = `Last update: ${stats.generatedAt || 'unknown'} · Source: public-stats.json + levels.json`;
 }

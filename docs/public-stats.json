@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-03T21:31:50.442569+00:00",
+  "generatedAt": "2026-03-03T21:38:31.362206+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
@@ -20,13 +20,19 @@
         "mint": "FpyACoNrrNeVi1wJq1STdp3UTfr3XuqmXAC1GNSeHC9r",
         "amount": 26460.224957,
         "decimals": 6,
-        "symbol": null
+        "symbol": null,
+        "priceUsd": 7.668e-06,
+        "valueUsd": 0.202897004970276,
+        "dexUrl": "https://dexscreener.com/solana/d5tookr95myf2qpfecf4ffz3rb8frtfdesdgdgqhucfo"
       },
       {
         "mint": "1392NbcdfNhTQrdgbNnYfPn5rqZcHN6DMxD6bxJwpump",
         "amount": 481171.666463,
         "decimals": 6,
-        "symbol": null
+        "symbol": null,
+        "priceUsd": 1.571e-06,
+        "valueUsd": 0.7559206880133731,
+        "dexUrl": "https://dexscreener.com/solana/y4iihmwzz2or2rv73dtrkzk7maofe7tgmwdrscpy8ke"
       }
     ]
   },
