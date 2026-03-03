@@ -1,0 +1,15 @@
+{
+  "updatedAt": "2026-03-03T21:44:00+01:00",
+  "rank": { "label": "🗡️ Operator", "level": "L1" },
+  "recentQuest": "Visual system + GitHub Pages deployment",
+  "nextMilestone": "🧩 Problem Solving needs 28 XP to hit L1",
+  "stats": [
+    { "icon": "🦅", "name": "Core Lvl", "level": "L1", "title": "🗡️ Operator", "cur": 31, "req": 400, "color": "linear-gradient(90deg,#22d3ee,#818cf8)" },
+    { "icon": "🧩", "name": "Problem Solving", "level": "L0", "title": "🪨 Initiate", "cur": 72, "req": 100, "color": "linear-gradient(90deg,#22c55e,#84cc16)" },
+    { "icon": "😂", "name": "Memes", "level": "L0", "title": "🪨 Initiate", "cur": 18, "req": 100, "color": "linear-gradient(90deg,#f472b6,#fb7185)" },
+    { "icon": "📜", "name": "History", "level": "L0", "title": "🪨 Initiate", "cur": 26, "req": 100, "color": "linear-gradient(90deg,#f59e0b,#fbbf24)" },
+    { "icon": "🧠", "name": "Memory", "level": "L1", "title": "🗡️ Operator", "cur": 9, "req": 400, "color": "linear-gradient(90deg,#60a5fa,#22d3ee)" },
+    { "icon": "💻", "name": "Coding", "level": "L0", "title": "🪨 Initiate", "cur": 34, "req": 100, "color": "linear-gradient(90deg,#34d399,#10b981)" },
+    { "icon": "🫀", "name": "Psychological Knowledge", "level": "L0", "title": "🪨 Initiate", "cur": 12, "req": 100, "color": "linear-gradient(90deg,#c084fc,#818cf8)" }
+  ]
+}

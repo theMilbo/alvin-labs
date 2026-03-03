@@ -34,46 +34,51 @@
           <h1>🎮 ALVIN // LEVEL DASHBOARD</h1>
           <div class="sub">Live RPG-style overview of assistant progression</div>
         </div>
-        <div class="rank">🏅 Core Rank: 🗡️ Operator (L1)</div>
+        <div class="rank" id="rankBadge">🏅 Core Rank: …</div>
       </div>
       <div class="grid" id="stats"></div>
     </section>
 
     <section class="panel">
-      <div class="row"><strong>🧾 Recent Quest</strong><span class="sub">Visual system + GitHub Pages deployment</span></div>
-      <div class="row" style="margin-top:8px"><strong>🎯 Next Milestone</strong><span class="sub">🧩 Problem Solving needs 28 XP to hit L1</span></div>
+      <div class="row"><strong>🧾 Recent Quest</strong><span class="sub" id="recentQuest">Loading…</span></div>
+      <div class="row" style="margin-top:8px"><strong>🎯 Next Milestone</strong><span class="sub" id="nextMilestone">Loading…</span></div>
       <ul>
         <li>XP scaling: 100 → 400 → 1600 → 6400 (x4 each level)</li>
         <li>Bonus XP: thanks, agreement, completed mission</li>
         <li>Source of truth: <code>workspace/LEVEL.md</code></li>
       </ul>
-      <div style="margin-top:10px" class="sub">Need updates? Edit <code>LEVEL.md</code> and I can regenerate this screen.</div>
+      <div style="margin-top:10px" class="sub">This page reads <code>levels.json</code> (repo-hosted), so updates can be pushed without editing HTML.</div>
     </section>
   </div>
 
   <script>
-    const stats = [
-      { icon:'🦅', name:'Core Lvl', level:'L1', title:'🗡️ Operator', cur:31, req:400, color:'linear-gradient(90deg,#22d3ee,#818cf8)' },
-      { icon:'🧩', name:'Problem Solving', level:'L0', title:'🪨 Initiate', cur:72, req:100, color:'linear-gradient(90deg,#22c55e,#84cc16)' },
-      { icon:'😂', name:'Memes', level:'L0', title:'🪨 Initiate', cur:18, req:100, color:'linear-gradient(90deg,#f472b6,#fb7185)' },
-      { icon:'📜', name:'History', level:'L0', title:'🪨 Initiate', cur:26, req:100, color:'linear-gradient(90deg,#f59e0b,#fbbf24)' },
-      { icon:'🧠', name:'Memory', level:'L1', title:'🗡️ Operator', cur:9, req:400, color:'linear-gradient(90deg,#60a5fa,#22d3ee)' },
-      { icon:'💻', name:'Coding', level:'L0', title:'🪨 Initiate', cur:34, req:100, color:'linear-gradient(90deg,#34d399,#10b981)' },
-      { icon:'🫀', name:'Psychological Knowledge', level:'L0', title:'🪨 Initiate', cur:12, req:100, color:'linear-gradient(90deg,#c084fc,#818cf8)' }
-    ];
+    async function load() {
+      const root = document.getElementById('stats');
+      try {
+        const res = await fetch('./levels.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to load levels.json');
+        const data = await res.json();
 
-    const root = document.getElementById('stats');
-    stats.forEach(s => {
-      const pct = Math.max(0, Math.min(100, (s.cur / s.req) * 100));
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="row"><div class="name">${s.icon} ${s.name}</div><div>${s.level}</div></div>
-        <div class="meta">${s.title} • ${s.cur}/${s.req} XP</div>
-        <div class="bar"><div class="fill" style="width:${pct}%;background:${s.color}"></div></div>
-      `;
-      root.appendChild(card);
-    });
+        document.getElementById('rankBadge').textContent = `🏅 Core Rank: ${data.rank?.label || 'Unknown'} (${data.rank?.level || 'L?'})`;
+        document.getElementById('recentQuest').textContent = data.recentQuest || '—';
+        document.getElementById('nextMilestone').textContent = data.nextMilestone || '—';
+
+        (data.stats || []).forEach(s => {
+          const pct = Math.max(0, Math.min(100, (s.cur / s.req) * 100));
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="row"><div class="name">${s.icon} ${s.name}</div><div>${s.level}</div></div>
+            <div class="meta">${s.title} • ${s.cur}/${s.req} XP</div>
+            <div class="bar"><div class="fill" style="width:${pct}%;background:${s.color}"></div></div>
+          `;
+          root.appendChild(card);
+        });
+      } catch (e) {
+        root.innerHTML = '<div class="card">Failed to load levels data. Please refresh.</div>';
+      }
+    }
+    load();
   </script>
 </body>
 </html>
