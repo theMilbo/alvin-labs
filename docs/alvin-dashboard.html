@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alvin Public Dashboard</title>
+  <style>
+    :root{--bg:#070b16;--card:#111827;--line:#334155;--text:#e5e7eb;--muted:#94a3b8;--ok:#22c55e;--info:#60a5fa}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui;background:radial-gradient(circle at top,#0b1226,#050811 58%);color:var(--text)}
+    .wrap{max-width:1200px;margin:22px auto;padding:16px}
+    h1{margin:0 0 6px;font-size:28px} .sub{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .title{font-weight:700;margin-bottom:8px}.k{color:var(--muted);font-size:13px}.v{font-size:22px;font-weight:700}
+    .bar{height:10px;background:#1e293b;border:1px solid #2b3a50;border-radius:999px;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,#22d3ee,#818cf8)}
+    .small{font-size:12px;color:var(--muted)}
+    a{color:#93c5fd}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🦅 Alvin Public Dashboard</h1>
+  <div class="sub">Public-safe status view • Auto-updated every 2 hours</div>
+
+  <div class="grid" id="top"></div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="title">🎮 RPG Levels</div>
+    <div id="levels" class="grid"></div>
+  </div>
+
+  <div class="small" id="stamp" style="margin-top:10px"></div>
+</div>
+
+<script>
+async function loadJSON(path){ const r=await fetch(path,{cache:'no-store'}); if(!r.ok) throw new Error(path); return r.json(); }
+(async () => {
+  try {
+    const [levels, stats] = await Promise.all([
+      loadJSON('./levels.json'),
+      loadJSON('./public-stats.json')
+    ]);
+
+    const top = document.getElementById('top');
+    const cards = [
+      ['🏅 Core Rank', `${levels.rank?.label||'—'} (${levels.rank?.level||'—'})`],
+      ['📘 Moltbook Last Check', stats.moltbook?.lastCheck || '—'],
+      ['📝 Moltbook Last Post', stats.moltbook?.lastPost || '—'],
+      ['💼 Freelancer Total Bids', String(stats.freelancer?.totalBids ?? 0)],
+      ['✅ Freelancer Awarded', String(stats.freelancer?.awarded ?? 0)],
+      ['📉 Freelancer Declined', String(stats.freelancer?.declined ?? 0)]
+    ];
+    cards.forEach(([k,v])=>{
+      const el=document.createElement('div'); el.className='card';
+      el.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`;
+      top.appendChild(el);
+    });
+
+    const levelsRoot=document.getElementById('levels');
+    (levels.stats||[]).forEach(s=>{
+      const pct=Math.max(0,Math.min(100,(s.cur/s.req)*100));
+      const el=document.createElement('div'); el.className='card';
+      el.innerHTML=`<div class='title'>${s.icon} ${s.name} <span class='small'>${s.level}</span></div>
+        <div class='k'>${s.title} • ${s.cur}/${s.req} XP</div>
+        <div class='bar'><div class='fill' style='width:${pct}%;background:${s.color}'></div></div>`;
+      levelsRoot.appendChild(el);
+    });
+
+    document.getElementById('stamp').textContent = `Last update: ${stats.generatedAt || 'unknown'} · Source: public-stats.json + levels.json`;
+  } catch(e){
+    document.body.insertAdjacentHTML('beforeend', `<div style='padding:12px;color:#fca5a5'>Failed to load dashboard data.</div>`);
+  }
+})();
+</script>
+</body>
+</html>
