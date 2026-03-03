@@ -3,205 +3,176 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alvin Flow v2</title>
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'dark',
-      flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'linear', nodeSpacing: 52, rankSpacing: 70 },
-      themeVariables: {
-        fontSize: '18px',
-        primaryColor: '#1f2937',
-        primaryTextColor: '#e5e7eb',
-        primaryBorderColor: '#60a5fa',
-        lineColor: '#94a3b8',
-        tertiaryColor: '#0f172a',
-        clusterBkg: '#0b1220',
-        clusterBorder: '#334155'
-      }
-    });
-
-    function initPanZoom() {
-      const wrap = document.getElementById('viewport');
-      const mermaidEl = document.querySelector('.mermaid');
-      const svg = mermaidEl?.querySelector('svg');
-      if (!wrap || !svg) return false;
-
-      svg.style.maxWidth = 'none';
-      svg.style.height = 'auto';
-
-      let scale = 1;
-      let minScale = 0.45;
-      let maxScale = 2.2;
-      let tx = 30;
-      let ty = 24;
-      let dragging = false;
-      let sx = 0;
-      let sy = 0;
-
-      function apply() {
-        svg.style.transformOrigin = '0 0';
-        svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-      }
-
-      wrap.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const rect = wrap.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        const my = e.clientY - rect.top;
-        const prev = scale;
-        scale = Math.min(maxScale, Math.max(minScale, scale * (e.deltaY < 0 ? 1.08 : 0.92)));
-        const k = scale / prev;
-        tx = mx - (mx - tx) * k;
-        ty = my - (my - ty) * k;
-        apply();
-      }, { passive: false });
-
-      wrap.addEventListener('pointerdown', (e) => {
-        dragging = true;
-        sx = e.clientX;
-        sy = e.clientY;
-        wrap.setPointerCapture(e.pointerId);
-        wrap.classList.add('dragging');
-      });
-      wrap.addEventListener('pointermove', (e) => {
-        if (!dragging) return;
-        tx += e.clientX - sx;
-        ty += e.clientY - sy;
-        sx = e.clientX;
-        sy = e.clientY;
-        apply();
-      });
-      wrap.addEventListener('pointerup', (e) => {
-        dragging = false;
-        wrap.classList.remove('dragging');
-        try { wrap.releasePointerCapture(e.pointerId); } catch {}
-      });
-
-      document.getElementById('zoomIn')?.addEventListener('click', () => { scale = Math.min(maxScale, scale * 1.15); apply(); });
-      document.getElementById('zoomOut')?.addEventListener('click', () => { scale = Math.max(minScale, scale * 0.87); apply(); });
-      document.getElementById('resetView')?.addEventListener('click', () => { scale = 1; tx = 30; ty = 24; apply(); });
-
-      apply();
-      return true;
-    }
-
-    const obs = new MutationObserver(() => { if (initPanZoom()) obs.disconnect(); });
-    obs.observe(document.documentElement, { childList: true, subtree: true });
-    window.addEventListener('load', () => setTimeout(initPanZoom, 250));
-  </script>
+  <title>Alvin Flow v3 (Draggable Nodes)</title>
+  <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
   <style>
     body { background:#0b1020; color:#e5e7eb; font-family: Inter, system-ui, sans-serif; margin:0; padding:24px; }
-    .card { max-width: 1500px; margin: 0 auto; background:#111827; border:1px solid #374151; border-radius:14px; padding:20px; }
-    h1 { margin:0 0 12px; font-size: 24px; }
+    .card { max-width: 1600px; margin: 0 auto; background:#111827; border:1px solid #374151; border-radius:14px; padding:20px; }
+    h1 { margin:0 0 8px; font-size: 24px; }
     p { margin:0 0 12px; color:#9ca3af; }
-    .toolbar { display:flex; gap:8px; margin-bottom:12px; }
+    .toolbar { display:flex; gap:8px; margin-bottom:12px; align-items:center; flex-wrap:wrap; }
     .toolbar button { background:#1f2937; border:1px solid #374151; color:#e5e7eb; border-radius:8px; padding:6px 10px; cursor:pointer; }
     .toolbar button:hover { background:#2b3648; }
-    #viewport {
+    #network {
       height: 82vh;
       border:1px solid #334155;
       border-radius:10px;
-      overflow: hidden;
-      position: relative;
-      cursor: grab;
       background-color: #0f172a;
       background-image:
         linear-gradient(rgba(148,163,184,0.12) 1px, transparent 1px),
         linear-gradient(90deg, rgba(148,163,184,0.12) 1px, transparent 1px);
       background-size: 28px 28px;
     }
-    #viewport.dragging { cursor: grabbing; }
-    .mermaid { width: 100%; height: 100%; }
-    .mermaid svg { user-select: none; -webkit-user-drag: none; }
+    .hint { opacity:.78; font-size:13px; }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>🎮 Alvin System Flow v2</h1>
-    <p>From message intake to response + memory persistence.</p>
+    <h1>🎮 Alvin System Flow v3</h1>
+    <p>Draggable boxes + persistent arrows. Drag nodes freely; links stay connected.</p>
+
     <div class="toolbar">
-      <button id="zoomIn">＋ Zoom In</button>
-      <button id="zoomOut">－ Zoom Out</button>
-      <button id="resetView">Reset View</button>
-      <span style="opacity:.75;align-self:center;margin-left:8px;font-size:13px;">Drag to pan • Mouse wheel to zoom</span>
+      <button id="fitBtn">Fit View</button>
+      <button id="layoutBtn">Auto Layout</button>
+      <button id="lockBtn">Toggle Physics</button>
+      <span class="hint">Drag nodes • Wheel zoom • Hold space + drag to pan</span>
     </div>
-    <div id="viewport">
-    <pre class="mermaid">
-flowchart LR
-    classDef lane fill:#0b1220,stroke:#334155,stroke-width:1.5px,color:#cbd5e1;
-    classDef node fill:#1f2937,stroke:#60a5fa,stroke-width:1.5px,color:#f8fafc;
-    classDef decision fill:#111827,stroke:#f59e0b,stroke-width:2px,color:#fef3c7;
 
-    subgraph IN[📩 Intake Lane]
-      A[Message arrives]
-      B[Parse metadata: channel + reply + history]
-      C[Intent extraction]
-      A --> B --> C
-    end
-
-    subgraph ID[🧭 Identity & Rules Lane]
-      D[Load SOUL.md]
-      E[Load OPS.md]
-      F[Apply constraints: boundaries, safety, style]
-      D --> E --> F
-    end
-
-    subgraph MEM[🧠 Memory Lane]
-      G{Memory needed?}
-      H[memory_search]
-      I[memory_get]
-      J[Use verified snippets]
-      G -- yes --> H --> I --> J
-      G -- no --> J0[Skip recall]
-    end
-
-    subgraph SKILL[🛠 Skill/Plan Lane]
-      K{Skill match?}
-      L[Read SKILL.md]
-      M[Plan steps]
-      K -- yes --> L --> M
-      K -- no --> M
-    end
-
-    subgraph EXEC[⚙️ Execution Lane]
-      N{Need tools?}
-      O[Run tools: read, edit, write, exec, browser]
-      P[Validate state: facts vs assumptions vs actions]
-      N -- yes --> O --> P
-      N -- no --> P
-    end
-
-    subgraph OUT[📤 Output Lane]
-      Q[Compose response]
-      R[Format tone + structure]
-      S[Add XP footer]
-      T[Send reply]
-      Q --> R --> S --> T
-    end
-
-    subgraph LOG[📝 Persistence Lane]
-      U{Durable memory?}
-      V[Append memory/YYYY-MM-DD.md]
-      W[End turn]
-      U -- yes --> V --> W
-      U -- no --> W
-    end
-
-    C --> F
-    F --> G
-    J --> K
-    J0 --> K
-    M --> N
-    P --> Q
-    T --> U
-
-    class A,B,C,D,E,F,H,I,J,J0,K,L,M,N,O,P,Q,R,S,T,U,V,W node;
-    class G,K,N,U decision;
-    class IN,ID,MEM,SKILL,EXEC,OUT,LOG lane;
-    </pre>
-    </div>
+    <div id="network"></div>
   </div>
+
+  <script>
+    const nodes = new vis.DataSet([
+      { id:'A', label:'📩 Message arrives', level:1, group:'lane' },
+      { id:'B', label:'Parse metadata\n(channel/reply/history)', level:2, group:'lane' },
+      { id:'C', label:'Intent extraction', level:3, group:'lane' },
+
+      { id:'D', label:'Load SOUL.md', level:4, group:'identity' },
+      { id:'E', label:'Load OPS.md', level:5, group:'identity' },
+      { id:'F', label:'Apply constraints\n(boundaries/safety/style)', level:6, group:'identity' },
+
+      { id:'G', label:'Memory needed?', level:7, group:'decision' },
+      { id:'H', label:'memory_search', level:8, group:'memory' },
+      { id:'I', label:'memory_get', level:9, group:'memory' },
+      { id:'J', label:'Use verified snippets', level:10, group:'memory' },
+      { id:'J0', label:'Skip recall', level:10, group:'memory' },
+
+      { id:'K', label:'Skill match?', level:11, group:'decision' },
+      { id:'L', label:'Read SKILL.md', level:12, group:'skill' },
+      { id:'M', label:'Plan steps', level:13, group:'skill' },
+
+      { id:'N', label:'Need tools?', level:14, group:'decision' },
+      { id:'O', label:'Run tools\n(read/edit/write/exec/browser)', level:15, group:'exec' },
+      { id:'P', label:'Validate state', level:16, group:'exec' },
+
+      { id:'Q', label:'Compose response', level:17, group:'out' },
+      { id:'R', label:'Format tone + structure', level:18, group:'out' },
+      { id:'S', label:'Add XP footer', level:19, group:'out' },
+      { id:'T', label:'Send reply', level:20, group:'out' },
+
+      { id:'U', label:'Durable memory?', level:21, group:'decision' },
+      { id:'V', label:'Append memory file', level:22, group:'log' },
+      { id:'W', label:'End turn', level:23, group:'log' }
+    ]);
+
+    const edges = new vis.DataSet([
+      { from:'A', to:'B', arrows:'to' },
+      { from:'B', to:'C', arrows:'to' },
+      { from:'C', to:'D', arrows:'to' },
+      { from:'D', to:'E', arrows:'to' },
+      { from:'E', to:'F', arrows:'to' },
+      { from:'F', to:'G', arrows:'to' },
+      { from:'G', to:'H', arrows:'to', label:'yes' },
+      { from:'H', to:'I', arrows:'to' },
+      { from:'I', to:'J', arrows:'to' },
+      { from:'G', to:'J0', arrows:'to', label:'no' },
+      { from:'J', to:'K', arrows:'to' },
+      { from:'J0', to:'K', arrows:'to' },
+      { from:'K', to:'L', arrows:'to', label:'yes' },
+      { from:'K', to:'M', arrows:'to', label:'no' },
+      { from:'L', to:'M', arrows:'to' },
+      { from:'M', to:'N', arrows:'to' },
+      { from:'N', to:'O', arrows:'to', label:'yes' },
+      { from:'N', to:'P', arrows:'to', label:'no' },
+      { from:'O', to:'P', arrows:'to' },
+      { from:'P', to:'Q', arrows:'to' },
+      { from:'Q', to:'R', arrows:'to' },
+      { from:'R', to:'S', arrows:'to' },
+      { from:'S', to:'T', arrows:'to' },
+      { from:'T', to:'U', arrows:'to' },
+      { from:'U', to:'V', arrows:'to', label:'yes' },
+      { from:'U', to:'W', arrows:'to', label:'no' },
+      { from:'V', to:'W', arrows:'to' }
+    ]);
+
+    const container = document.getElementById('network');
+    const data = { nodes, edges };
+    let physicsOn = false;
+
+    const options = {
+      layout: {
+        hierarchical: {
+          enabled: true,
+          direction: 'LR',
+          levelSeparation: 180,
+          nodeSpacing: 120,
+          treeSpacing: 180,
+          sortMethod: 'directed'
+        }
+      },
+      interaction: {
+        dragNodes: true,
+        dragView: true,
+        zoomView: true,
+        hover: true,
+        navigationButtons: false,
+        keyboard: true
+      },
+      physics: { enabled: physicsOn },
+      nodes: {
+        shape: 'box',
+        margin: 12,
+        widthConstraint: { maximum: 270 },
+        font: { color:'#f8fafc', size:18, face:'Inter, system-ui, sans-serif', multi:'md' },
+        borderWidth: 2,
+        color: { background:'#1f2937', border:'#60a5fa', highlight:{ background:'#334155', border:'#93c5fd' } }
+      },
+      edges: {
+        color: { color:'#94a3b8', highlight:'#cbd5e1' },
+        smooth: { type:'cubicBezier', forceDirection:'horizontal', roundness:0.32 },
+        arrows: { to: { enabled:true, scaleFactor:0.8 } },
+        font: { color:'#cbd5e1', size:14, strokeWidth:0, align:'middle' }
+      },
+      groups: {
+        lane:     { color:{ background:'#1f2937', border:'#60a5fa' } },
+        identity: { color:{ background:'#172554', border:'#3b82f6' } },
+        memory:   { color:{ background:'#052e16', border:'#22c55e' } },
+        skill:    { color:{ background:'#3f1d2e', border:'#f472b6' } },
+        exec:     { color:{ background:'#3f2d10', border:'#f59e0b' } },
+        out:      { color:{ background:'#083344', border:'#22d3ee' } },
+        log:      { color:{ background:'#312e81', border:'#818cf8' } },
+        decision: {
+          shape:'diamond',
+          color:{ background:'#111827', border:'#f59e0b' },
+          font:{ color:'#fef3c7', size:16, multi:'md' }
+        }
+      }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    document.getElementById('fitBtn').addEventListener('click', () => network.fit({ animation:true }));
+    document.getElementById('layoutBtn').addEventListener('click', () => {
+      network.setOptions({ layout: { hierarchical: { enabled:true, direction:'LR', levelSeparation:180, nodeSpacing:120 } }, physics: { enabled:false } });
+      network.stabilize(50);
+      network.fit({ animation:true });
+    });
+    document.getElementById('lockBtn').addEventListener('click', () => {
+      physicsOn = !physicsOn;
+      network.setOptions({ physics: { enabled: physicsOn } });
+    });
+
+    setTimeout(() => network.fit({ animation:false }), 80);
+  </script>
 </body>
 </html>
