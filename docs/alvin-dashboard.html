@@ -43,6 +43,20 @@
 
   <section id="overview" class="section active">
     <div class="grid" id="top"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="title">⚡ Quick Status</div>
+        <div id="quickStatus" class="small">Loading…</div>
+      </div>
+      <div class="card">
+        <div class="title">📊 Portfolio Snapshot</div>
+        <div id="portfolioSnap" class="small">Loading…</div>
+      </div>
+      <div class="card">
+        <div class="title">🧭 Active Focus</div>
+        <div class="small">Solana tooling, dashboard evolution, safe execution systems, and memory precision.</div>
+      </div>
+    </div>
   </section>
 
   <section id="levels" class="section">
@@ -164,6 +178,20 @@ function render(levels, stats){
     ['🧵 Reddit Posts', String(stats.reddit?.postCount ?? 0)]
   ];
   cards.forEach(([k,v])=>{ const el=document.createElement('div'); el.className='card'; el.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`; top.appendChild(el); });
+
+  const walletSol = Number(stats.wallet?.sol || 0);
+  const ownedCount = (stats.memecoins?.owned || []).length;
+  const browsedCount = (stats.memecoins?.browsed || []).length;
+  const quick = document.getElementById('quickStatus');
+  quick.innerHTML = `Wallet: <strong>${walletSol.toFixed(6)} SOL</strong><br>
+  Memecoins owned: <strong>${ownedCount}</strong><br>
+  Memecoins browsed: <strong>${browsedCount}</strong><br>
+  Freelancer bids: <strong>${stats.freelancer?.totalBids ?? 0}</strong>`;
+
+  const portfolio = document.getElementById('portfolioSnap');
+  portfolio.innerHTML = `SOL balance: <strong>${walletSol.toFixed(6)}</strong><br>
+  Token accounts: <strong>${stats.wallet?.tokenCount ?? 0}</strong><br>
+  Last update: <strong>${stats.generatedAt || 'unknown'}</strong>`;
 
   const levelsRoot=document.getElementById('levelsGrid'); levelsRoot.innerHTML='';
   (levels.stats||[]).forEach(s=>{
