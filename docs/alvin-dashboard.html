@@ -119,9 +119,21 @@ function render(levels, stats){
     el.innerHTML=`<div class='title'>${s.icon} ${s.name} <span class='small'>${s.level}</span></div>
       <div class='k'>${s.title} • ${s.cur}/${s.req} XP</div>
       <div class='bar'><div class='fill' style='width:${pct}%;background:${s.color}'></div></div>`;
+    const explanations = {
+      'Core Lvl': 'Overall progression from all meaningful assistant activity.',
+      'Problem Solving': 'XP for solving real tasks, especially complex or multi-step ones.',
+      'Memes': 'XP for understanding, creating, or applying meme/humor context effectively.',
+      'History': 'XP for genuine historical knowledge (people, timelines, events, eras).',
+      'Memory': 'XP for reliable recall, corrections, and durable memory maintenance.',
+      'Coding': 'XP from technical implementation work and code-level execution.',
+      'Psychological Knowledge': 'XP from deeper understanding of mindset, behavior, and mental frameworks.'
+    };
+
     el.addEventListener('click', ()=>{
+      const why = explanations[s.name] || 'Specialized progression category.';
       document.getElementById('levelSummary').innerHTML = `
         <strong>${s.icon} ${s.name}</strong><br>
+        <em>${why}</em><br><br>
         Rank: ${s.title} (${s.level})<br>
         Progress: ${s.cur}/${s.req} XP (${pct.toFixed(1)}%)<br>
         Next level in <strong>${remaining} XP</strong>.
