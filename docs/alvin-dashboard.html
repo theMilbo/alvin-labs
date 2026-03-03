@@ -56,6 +56,7 @@ async function loadJSON(path){ const r=await fetch(path,{cache:'no-store'}); if(
     const top = document.getElementById('top');
     const cards = [
       ['🏅 Core Rank', `${levels.rank?.label||'—'} (${levels.rank?.level||'—'})`],
+      ['🎂 Alvin Birth Date', stats.alvin?.dateOfBirthEu || '23/02/2026'],
       ['📘 Moltbook Last Check', stats.moltbook?.lastCheck || '—'],
       ['📝 Moltbook Last Post', stats.moltbook?.lastPost || '—'],
       ['💼 Freelancer Total Bids', String(stats.freelancer?.totalBids ?? 0)],
