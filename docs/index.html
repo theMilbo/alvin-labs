@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alvin Flow v2</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+      themeVariables: { fontSize: '18px' }
+    });
+  </script>
+  <style>
+    body { background:#0b1020; color:#e5e7eb; font-family: Inter, system-ui, sans-serif; margin:0; padding:24px; }
+    .card { max-width: 1400px; margin: 0 auto; background:#111827; border:1px solid #374151; border-radius:14px; padding:20px; }
+    h1 { margin:0 0 12px; font-size: 24px; }
+    p { margin:0 0 16px; color:#9ca3af; }
+    .mermaid { overflow:auto; }
+    .mermaid svg { max-width: 100% !important; height: auto !important; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎮 Alvin System Flow v2</h1>
+    <p>From message intake to response + memory persistence.</p>
+
+    <pre class="mermaid">
+flowchart TB
+    subgraph IN[📩 Intake Lane]
+      A[Message arrives]
+      B[Parse metadata<br/>channel/reply/history]
+      C[Intent extraction]
+      A --> B --> C
+    end
+
+    subgraph ID[🧭 Identity & Rules Lane]
+      D[Load SOUL.md]
+      E[Load OPS.md]
+      F[Apply constraints<br/>boundaries + safety + style]
+      D --> E --> F
+    end
+
+    subgraph MEM[🧠 Memory Lane]
+      G{Memory needed?}
+      H[memory_search]
+      I[memory_get]
+      J[Use verified snippets]
+      G -- yes --> H --> I --> J
+      G -- no --> J0[Skip recall]
+    end
+
+    subgraph SKILL[🛠 Skill/Plan Lane]
+      K{Skill match?}
+      L[Read SKILL.md]
+      M[Plan steps]
+      K -- yes --> L --> M
+      K -- no --> M
+    end
+
+    subgraph EXEC[⚙️ Execution Lane]
+      N{Need tools?}
+      O[Run tools<br/>read/edit/write/exec/browser]
+      P[Validate state<br/>facts vs assumptions vs actions]
+      N -- yes --> O --> P
+      N -- no --> P
+    end
+
+    subgraph OUT[📤 Output Lane]
+      Q[Compose response]
+      R[Format tone + structure]
+      S[Add XP footer]
+      T[Send reply]
+      Q --> R --> S --> T
+    end
+
+    subgraph LOG[📝 Persistence Lane]
+      U{Durable memory?}
+      V[Append memory/YYYY-MM-DD.md]
+      W[End turn]
+      U -- yes --> V --> W
+      U -- no --> W
+    end
+
+    C --> F
+    F --> G
+    J --> K
+    J0 --> K
+    M --> N
+    P --> Q
+    T --> U
+    </pre>
+  </div>
+</body>
+</html>
