@@ -19,6 +19,10 @@
     .bar{height:10px;background:#1e293b;border:1px solid #2b3a50;border-radius:999px;overflow:hidden;margin-top:8px}
     .fill{height:100%;background:linear-gradient(90deg,#22d3ee,#818cf8)}
     .small{font-size:12px;color:var(--muted)}
+    .table{width:100%;border-collapse:collapse;font-size:13px}
+    .table th,.table td{padding:10px 8px;border-bottom:1px solid #243043;text-align:left;vertical-align:top}
+    .table th{color:#9fb0c7;font-weight:600}
+    .chip{display:inline-block;padding:2px 8px;border:1px solid #334155;border-radius:999px;background:#0f172a;font-size:11px;color:#cbd5e1}
     .section{display:none}.section.active{display:block}
     input.search{width:100%;margin-top:8px;background:#0b1327;border:1px solid var(--line);color:var(--text);padding:8px;border-radius:8px}
     details{margin-top:8px}
@@ -104,7 +108,7 @@
       </div>
       <div class="card">
         <div class="title">🎒 Owned Memecoins</div>
-        <div id="ownedMemecoins" class="grid">Loading…</div>
+        <div id="ownedMemecoins">Loading…</div>
       </div>
     </div>
   </section>
@@ -247,19 +251,25 @@ function render(levels, stats){
 
   const owned = stats.memecoins?.owned || [];
   document.getElementById('ownedMemecoins').innerHTML = owned.length
-    ? owned.map(x => {
-        const val = (typeof x.valueUsd === 'number') ? `$${x.valueUsd.toFixed(4)}` : 'n/a';
-        const px = (typeof x.priceUsd === 'number') ? `$${x.priceUsd.toFixed(8)}` : 'n/a';
-        const link = x.dexUrl ? `<a href="${x.dexUrl}" target="_blank" rel="noopener">DexScreener ↗</a>` : 'DexScreener n/a';
-        return `<div class='card'>
-          <div class='title'>${x.symbol || 'MEME'} </div>
-          <div class='small'><code>${x.mint}</code></div>
-          <div class='small'>Amount: <strong>${x.amount}</strong></div>
-          <div class='small'>Price: <strong>${px}</strong></div>
-          <div class='small'>Value: <strong>${val}</strong></div>
-          <div class='small'>${link}</div>
-        </div>`;
-      }).join('')
+    ? `<table class="table">
+        <thead>
+          <tr><th>Token</th><th>Amount</th><th>Price</th><th>Value</th><th>Market</th></tr>
+        </thead>
+        <tbody>
+          ${owned.map(x => {
+            const val = (typeof x.valueUsd === 'number') ? `$${x.valueUsd.toFixed(4)}` : 'n/a';
+            const px = (typeof x.priceUsd === 'number') ? `$${x.priceUsd.toFixed(8)}` : 'n/a';
+            const link = x.dexUrl ? `<a href="${x.dexUrl}" target="_blank" rel="noopener">DexScreener ↗</a>` : '—';
+            return `<tr>
+              <td><div><strong>${x.symbol || 'MEME'}</strong></div><div class="small"><code>${x.mint}</code></div></td>
+              <td>${x.amount}</td>
+              <td>${px}</td>
+              <td><span class="chip">${val}</span></td>
+              <td>${link}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`
     : '<div class="small">No memecoins owned yet (or none detected).</div>';
 
 
