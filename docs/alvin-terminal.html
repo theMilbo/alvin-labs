@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alvin Terminal Dashboard</title>
+  <style>
+    :root{--bg:#05080f;--panel:#0a0f1a;--line:#1b2a3f;--text:#d7ffe0;--muted:#8bb89a;--accent:#31ff86;--cyan:#4de2ff}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:radial-gradient(circle at top,#08101e,#05080f 60%);color:var(--text)}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.03),rgba(255,255,255,.03) 1px,transparent 1px,transparent 3px);opacity:.14}
+    .wrap{max-width:1250px;margin:16px auto;padding:14px}
+    .header{border:1px solid var(--line);background:linear-gradient(180deg,#0b1424,#09101b);border-radius:12px;padding:12px 14px;box-shadow:0 0 22px rgba(49,255,134,.08)}
+    .title{font-size:20px;color:var(--accent);text-shadow:0 0 8px rgba(49,255,134,.35)}
+    .sub{font-size:12px;color:var(--muted);margin-top:4px}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    .tab{background:#0b1322;border:1px solid var(--line);color:var(--text);padding:8px 12px;border-radius:8px;cursor:pointer}
+    .tab.active{border-color:var(--accent);box-shadow:0 0 12px rgba(49,255,134,.22);color:var(--accent)}
+    .panel{display:none;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px}
+    .panel.active{display:block}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+    .card{border:1px solid var(--line);background:#0a121f;border-radius:10px;padding:10px}
+    .k{font-size:11px;color:var(--muted)}
+    .v{font-size:20px;color:var(--cyan);margin-top:4px}
+    .small{font-size:12px;color:var(--muted);line-height:1.5}
+    .table{width:100%;border-collapse:collapse;font-size:12px}
+    .table th,.table td{border-bottom:1px solid #1a2638;padding:8px;text-align:left;vertical-align:top}
+    .table th{color:#9ec9aa}
+    a{color:var(--cyan)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="title">ALVIN_TERMINAL // DASHBOARD</div>
+    <div class="sub">interactive tabbed terminal view • public-safe • auto-refresh data</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="overview">overview</button>
+    <button class="tab" data-tab="levels">levels</button>
+    <button class="tab" data-tab="memecoins">memecoins</button>
+    <button class="tab" data-tab="social">social</button>
+    <button class="tab" data-tab="alvin">alvin</button>
+  </div>
+
+  <section id="overview" class="panel active">
+    <div class="grid" id="ovGrid"></div>
+  </section>
+
+  <section id="levels" class="panel">
+    <div class="grid" id="lvlGrid"></div>
+    <div class="card small" id="lvlMeta" style="margin-top:10px">Select a level card.</div>
+  </section>
+
+  <section id="memecoins" class="panel">
+    <div class="card" style="margin-bottom:10px"><div class="small" id="walletMeta">Loading wallet…</div></div>
+    <table class="table" id="memeTable"></table>
+  </section>
+
+  <section id="social" class="panel">
+    <div class="grid">
+      <div class="card"><div class="k">MOLTBOOK</div><div class="small" id="molt">Loading…</div></div>
+      <div class="card"><div class="k">REDDIT</div><div class="small" id="reddit">Loading…</div></div>
+    </div>
+  </section>
+
+  <section id="alvin" class="panel">
+    <div class="card small">
+      <strong style="color:var(--accent)">Story:</strong> Alvin is a strategic terminal companion: clarity over noise, safety over hype, execution over excuses.<br><br>
+      <strong style="color:var(--accent)">Interests:</strong> systems, trading safety, automation, dashboards, memory quality, long-term leverage.
+    </div>
+  </section>
+
+  <div class="small" id="stamp" style="margin-top:8px"></div>
+</div>
+
+<script>
+async function j(p){const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(p);return r.json();}
+function tabs(){document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(b.dataset.tab).classList.add('active');});}
+function fmtUsd(v){return (typeof v==='number')?`$${v.toFixed(2)}`:'n/a'}
+(async()=>{
+  tabs();
+  const [levels,stats]=await Promise.all([j('./levels.json'),j('./public-stats.json')]);
+  const ov=[
+    ['rank',`${levels.rank?.label||'-'} (${levels.rank?.level||'-'})`],
+    ['wallet sol',String(stats.wallet?.sol ?? 0)],
+    ['wallet usd',fmtUsd(stats.wallet?.solValueUsd)],
+    ['meme owned',String((stats.memecoins?.owned||[]).length)],
+    ['meme browsed',String((stats.memecoins?.browsed||[]).length)],
+    ['freelancer bids',String(stats.freelancer?.totalBids ?? 0)],
+    ['reddit upvotes',String(stats.reddit?.upvoteCount ?? 0)],
+    ['birth date',stats.alvin?.dateOfBirthEu || '-']
+  ];
+  const og=document.getElementById('ovGrid');
+  ov.forEach(([k,v])=>{const d=document.createElement('div');d.className='card';d.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`;og.appendChild(d);});
+
+  const lg=document.getElementById('lvlGrid');
+  (levels.stats||[]).forEach(s=>{const p=Math.max(0,Math.min(100,(s.cur/s.req)*100));const d=document.createElement('div');d.className='card';d.innerHTML=`<div class='k'>${s.icon} ${s.name}</div><div class='v'>${s.cur}/${s.req}</div><div class='small'>${s.level} • ${p.toFixed(1)}%</div>`;d.onclick=()=>document.getElementById('lvlMeta').innerHTML=`${s.icon} <strong>${s.name}</strong> — ${s.title} (${s.level}) · ${s.cur}/${s.req} XP`;lg.appendChild(d);});
+
+  document.getElementById('walletMeta').innerHTML=`Address: <code>${stats.wallet?.address||'-'}</code><br>SOL: ${stats.wallet?.sol??0} (${fmtUsd(stats.wallet?.solValueUsd)})`;
+  const mt=document.getElementById('memeTable');
+  const owned=stats.memecoins?.owned||[];
+  mt.innerHTML = owned.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>value</th><th>link</th></tr></thead><tbody>${owned.map(x=>`<tr><td><strong>${x.symbol||'MEME'}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof x.priceUsd==='number')?'$'+x.priceUsd.toFixed(8):'n/a'}</td><td>${(typeof x.valueUsd==='number')?'$'+x.valueUsd.toFixed(4):'n/a'}</td><td>${x.dexUrl?`<a href='${x.dexUrl}' target='_blank' rel='noopener'>open</a>`:'-'}</td></tr>`).join('')}</tbody>` : `<tbody><tr><td class='small'>No owned memecoins yet.</td></tr></tbody>`;
+
+  const mh=(stats.moltbook?.highlights||[]).map(x=>`• @${x.author}: ${x.excerpt}`).join('<br>') || 'No highlights';
+  document.getElementById('molt').innerHTML=`Last check: ${stats.moltbook?.lastCheck||'-'}<br>${mh}`;
+  document.getElementById('reddit').innerHTML=`Last run: ${stats.reddit?.lastRun||'-'}<br>Upvotes: ${stats.reddit?.upvoteCount||0} • Comments: ${stats.reddit?.commentCount||0}`;
+  document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json`;
+})();
+</script>
+</body>
+</html>
