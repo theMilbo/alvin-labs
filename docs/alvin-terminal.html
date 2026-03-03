@@ -14,12 +14,15 @@
     .title{font-size:20px;color:var(--accent);text-shadow:0 0 8px rgba(49,255,134,.35)}
     .sub{font-size:12px;color:var(--muted);margin-top:4px}
     .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-    .tab{background:#0b1322;border:1px solid var(--line);color:var(--text);padding:8px 12px;border-radius:8px;cursor:pointer}
-    .tab.active{border-color:var(--accent);box-shadow:0 0 12px rgba(49,255,134,.22);color:var(--accent)}
-    .panel{display:none;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px}
-    .panel.active{display:block}
+    .tab{background:#0b1322;border:1px solid var(--line);color:var(--text);padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .18s ease}
+    .tab:hover{transform:translateY(-1px);border-color:#2f4768}
+    .tab.active{border-color:var(--accent);box-shadow:0 0 12px rgba(49,255,134,.22);color:var(--accent);transform:translateY(-1px)}
+    .panel{display:none;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px;opacity:0;transform:translateY(8px) scale(.995)}
+    .panel.active{display:block;animation:panelIn .24s ease forwards}
+    @keyframes panelIn{from{opacity:0;transform:translateY(8px) scale(.995)}to{opacity:1;transform:translateY(0) scale(1)}}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-    .card{border:1px solid var(--line);background:#0a121f;border-radius:10px;padding:10px}
+    .card{border:1px solid var(--line);background:#0a121f;border-radius:10px;padding:10px;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+    .card:hover{transform:translateY(-2px);border-color:#2d4360;box-shadow:0 6px 18px rgba(8,18,32,.35)}
     .k{font-size:11px;color:var(--muted)}
     .v{font-size:20px;color:var(--cyan);margin-top:4px}
     .small{font-size:12px;color:var(--muted);line-height:1.5}
