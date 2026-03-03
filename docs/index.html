@@ -9,24 +9,116 @@
     mermaid.initialize({
       startOnLoad: true,
       theme: 'dark',
-      flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
-      themeVariables: { fontSize: '18px' }
+      flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' },
+      themeVariables: { fontSize: '16px' }
     });
+
+    function initPanZoom() {
+      const wrap = document.getElementById('viewport');
+      const mermaidEl = document.querySelector('.mermaid');
+      const svg = mermaidEl?.querySelector('svg');
+      if (!wrap || !svg) return false;
+
+      svg.style.maxWidth = 'none';
+      svg.style.height = 'auto';
+
+      let scale = 0.75;
+      let minScale = 0.35;
+      let maxScale = 2.4;
+      let tx = 40;
+      let ty = 30;
+      let dragging = false;
+      let sx = 0;
+      let sy = 0;
+
+      function apply() {
+        svg.style.transformOrigin = '0 0';
+        svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      }
+
+      wrap.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const rect = wrap.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const prev = scale;
+        scale = Math.min(maxScale, Math.max(minScale, scale * (e.deltaY < 0 ? 1.08 : 0.92)));
+        const k = scale / prev;
+        tx = mx - (mx - tx) * k;
+        ty = my - (my - ty) * k;
+        apply();
+      }, { passive: false });
+
+      wrap.addEventListener('pointerdown', (e) => {
+        dragging = true;
+        sx = e.clientX;
+        sy = e.clientY;
+        wrap.setPointerCapture(e.pointerId);
+        wrap.classList.add('dragging');
+      });
+      wrap.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        tx += e.clientX - sx;
+        ty += e.clientY - sy;
+        sx = e.clientX;
+        sy = e.clientY;
+        apply();
+      });
+      wrap.addEventListener('pointerup', (e) => {
+        dragging = false;
+        wrap.classList.remove('dragging');
+        try { wrap.releasePointerCapture(e.pointerId); } catch {}
+      });
+
+      document.getElementById('zoomIn')?.addEventListener('click', () => { scale = Math.min(maxScale, scale * 1.15); apply(); });
+      document.getElementById('zoomOut')?.addEventListener('click', () => { scale = Math.max(minScale, scale * 0.87); apply(); });
+      document.getElementById('resetView')?.addEventListener('click', () => { scale = 0.75; tx = 40; ty = 30; apply(); });
+
+      apply();
+      return true;
+    }
+
+    const obs = new MutationObserver(() => { if (initPanZoom()) obs.disconnect(); });
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+    window.addEventListener('load', () => setTimeout(initPanZoom, 250));
   </script>
   <style>
     body { background:#0b1020; color:#e5e7eb; font-family: Inter, system-ui, sans-serif; margin:0; padding:24px; }
-    .card { max-width: 1400px; margin: 0 auto; background:#111827; border:1px solid #374151; border-radius:14px; padding:20px; }
+    .card { max-width: 1500px; margin: 0 auto; background:#111827; border:1px solid #374151; border-radius:14px; padding:20px; }
     h1 { margin:0 0 12px; font-size: 24px; }
-    p { margin:0 0 16px; color:#9ca3af; }
-    .mermaid { overflow:auto; }
-    .mermaid svg { max-width: 100% !important; height: auto !important; }
+    p { margin:0 0 12px; color:#9ca3af; }
+    .toolbar { display:flex; gap:8px; margin-bottom:12px; }
+    .toolbar button { background:#1f2937; border:1px solid #374151; color:#e5e7eb; border-radius:8px; padding:6px 10px; cursor:pointer; }
+    .toolbar button:hover { background:#2b3648; }
+    #viewport {
+      height: 75vh;
+      border:1px solid #334155;
+      border-radius:10px;
+      overflow: hidden;
+      position: relative;
+      cursor: grab;
+      background-color: #0f172a;
+      background-image:
+        linear-gradient(rgba(148,163,184,0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    #viewport.dragging { cursor: grabbing; }
+    .mermaid { width: 100%; height: 100%; }
+    .mermaid svg { user-select: none; -webkit-user-drag: none; }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>🎮 Alvin System Flow v2</h1>
     <p>From message intake to response + memory persistence.</p>
-
+    <div class="toolbar">
+      <button id="zoomIn">＋ Zoom In</button>
+      <button id="zoomOut">－ Zoom Out</button>
+      <button id="resetView">Reset View</button>
+      <span style="opacity:.75;align-self:center;margin-left:8px;font-size:13px;">Drag to pan • Mouse wheel to zoom</span>
+    </div>
+    <div id="viewport">
     <pre class="mermaid">
 flowchart TB
     subgraph IN[📩 Intake Lane]
@@ -92,6 +184,7 @@ flowchart TB
     P --> Q
     T --> U
     </pre>
+    </div>
   </div>
 </body>
 </html>
