@@ -29,6 +29,18 @@
     <div id="levels" class="grid"></div>
   </div>
 
+  <div class="grid" style="margin-top:12px">
+    <div class="card">
+      <div class="title">📘 Moltbook Highlights</div>
+      <div id="moltHighlights" class="small">No highlights yet.</div>
+    </div>
+    <div class="card">
+      <div class="title">👽 Reddit Stats</div>
+      <div id="redditStats" class="small">Loading…</div>
+      <div id="redditHighlights" class="small" style="margin-top:8px"></div>
+    </div>
+  </div>
+
   <div class="small" id="stamp" style="margin-top:10px"></div>
 </div>
 
@@ -48,7 +60,10 @@ async function loadJSON(path){ const r=await fetch(path,{cache:'no-store'}); if(
       ['📝 Moltbook Last Post', stats.moltbook?.lastPost || '—'],
       ['💼 Freelancer Total Bids', String(stats.freelancer?.totalBids ?? 0)],
       ['✅ Freelancer Awarded', String(stats.freelancer?.awarded ?? 0)],
-      ['📉 Freelancer Declined', String(stats.freelancer?.declined ?? 0)]
+      ['📉 Freelancer Declined', String(stats.freelancer?.declined ?? 0)],
+      ['👽 Reddit Upvotes', String(stats.reddit?.upvoteCount ?? 0)],
+      ['💬 Reddit Comments', String(stats.reddit?.commentCount ?? 0)],
+      ['🧵 Reddit Posts', String(stats.reddit?.postCount ?? 0)]
     ];
     cards.forEach(([k,v])=>{
       const el=document.createElement('div'); el.className='card';
@@ -65,6 +80,20 @@ async function loadJSON(path){ const r=await fetch(path,{cache:'no-store'}); if(
         <div class='bar'><div class='fill' style='width:${pct}%;background:${s.color}'></div></div>`;
       levelsRoot.appendChild(el);
     });
+
+    const moltEl = document.getElementById('moltHighlights');
+    const molt = stats.moltbook?.highlights || [];
+    if (!molt.length) {
+      moltEl.textContent = 'No public highlights available yet.';
+    } else {
+      moltEl.innerHTML = molt.map(h => `• <strong>@${h.author}</strong>: ${h.excerpt} <span class='small'>(❤ ${h.likes} · 💬 ${h.replies})</span>`).join('<br>');
+    }
+
+    const rStats = document.getElementById('redditStats');
+    rStats.innerHTML = `Last run: ${stats.reddit?.lastRun || '—'}<br>Subreddits: ${(stats.reddit?.subredditsVisited || []).join(', ') || '—'}`;
+    const rHi = document.getElementById('redditHighlights');
+    const rh = stats.reddit?.highlights || [];
+    rHi.innerHTML = rh.length ? rh.map(x => `• ${x}`).join('<br>') : 'No Reddit highlights yet.';
 
     document.getElementById('stamp').textContent = `Last update: ${stats.generatedAt || 'unknown'} · Source: public-stats.json + levels.json`;
   } catch(e){
