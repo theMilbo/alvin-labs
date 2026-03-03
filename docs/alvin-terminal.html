@@ -38,7 +38,16 @@
   </style>
 </head>
 <body>
-<div class="wrap">
+<div id="boot" style="position:fixed;inset:0;background:#04070d;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="width:min(820px,92vw);border:1px solid #1b2a3f;background:#07101a;border-radius:10px;padding:14px;box-shadow:0 0 24px rgba(49,255,134,.12)">
+    <div style="color:#31ff86;font-weight:700;margin-bottom:8px">ALVIN_TERMINAL // BOOT SEQUENCE</div>
+    <pre id="bootLog" style="margin:0;color:#9fd4b3;font-size:12px;line-height:1.5;min-height:180px;white-space:pre-wrap"></pre>
+    <div style="height:8px;border:1px solid #2a3d58;border-radius:999px;overflow:hidden;margin-top:8px">
+      <div id="bootBar" style="height:100%;width:0;background:linear-gradient(90deg,#31ff86,#4de2ff)"></div>
+    </div>
+  </div>
+</div>
+<div class="wrap" id="app" style="opacity:0;transition:opacity .35s ease">
   <div class="header">
     <div class="title">ALVIN_TERMINAL // DASHBOARD</div>
     <div class="sub">interactive tabbed terminal view • public-safe • auto-refresh data</div>
@@ -87,6 +96,27 @@
 async function j(p){const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(p);return r.json();}
 function tabs(){document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(b.dataset.tab).classList.add('active');});}
 function fmtUsd(v){return (typeof v==='number')?`$${v.toFixed(2)}`:'n/a'}
+async function bootSequence(){
+  const lines=[
+    'INIT CORE.................OK',
+    'LOAD PROFILE..............OK',
+    'MOUNT DATA STREAM.........OK',
+    'VERIFY WALLET MODULE......OK',
+    'SYNC LEVEL MATRIX.........OK',
+    'RENDER TERMINAL UI........OK'
+  ];
+  const log=document.getElementById('bootLog');
+  const bar=document.getElementById('bootBar');
+  for(let i=0;i<lines.length;i++){
+    log.textContent += lines[i] + '\n';
+    bar.style.width = `${Math.round(((i+1)/lines.length)*100)}%`;
+    await new Promise(r=>setTimeout(r, 220));
+  }
+  await new Promise(r=>setTimeout(r, 200));
+  document.getElementById('boot').style.display='none';
+  document.getElementById('app').style.opacity='1';
+}
+
 (async()=>{
   tabs();
   const [levels,stats]=await Promise.all([j('./levels.json'),j('./public-stats.json')]);
@@ -115,6 +145,7 @@ function fmtUsd(v){return (typeof v==='number')?`$${v.toFixed(2)}`:'n/a'}
   document.getElementById('molt').innerHTML=`Last check: ${stats.moltbook?.lastCheck||'-'}<br>${mh}`;
   document.getElementById('reddit').innerHTML=`Last run: ${stats.reddit?.lastRun||'-'}<br>Upvotes: ${stats.reddit?.upvoteCount||0} • Comments: ${stats.reddit?.commentCount||0}`;
   document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json`;
+  await bootSequence();
 })();
 </script>
 </body>
