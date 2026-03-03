@@ -9,9 +9,9 @@
     mermaid.initialize({
       startOnLoad: true,
       theme: 'dark',
-      flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' },
+      flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'linear', nodeSpacing: 52, rankSpacing: 70 },
       themeVariables: {
-        fontSize: '16px',
+        fontSize: '18px',
         primaryColor: '#1f2937',
         primaryTextColor: '#e5e7eb',
         primaryBorderColor: '#60a5fa',
@@ -31,11 +31,11 @@
       svg.style.maxWidth = 'none';
       svg.style.height = 'auto';
 
-      let scale = 0.75;
-      let minScale = 0.35;
-      let maxScale = 2.4;
-      let tx = 40;
-      let ty = 30;
+      let scale = 1;
+      let minScale = 0.45;
+      let maxScale = 2.2;
+      let tx = 30;
+      let ty = 24;
       let dragging = false;
       let sx = 0;
       let sy = 0;
@@ -81,7 +81,7 @@
 
       document.getElementById('zoomIn')?.addEventListener('click', () => { scale = Math.min(maxScale, scale * 1.15); apply(); });
       document.getElementById('zoomOut')?.addEventListener('click', () => { scale = Math.max(minScale, scale * 0.87); apply(); });
-      document.getElementById('resetView')?.addEventListener('click', () => { scale = 0.75; tx = 40; ty = 30; apply(); });
+      document.getElementById('resetView')?.addEventListener('click', () => { scale = 1; tx = 30; ty = 24; apply(); });
 
       apply();
       return true;
@@ -100,7 +100,7 @@
     .toolbar button { background:#1f2937; border:1px solid #374151; color:#e5e7eb; border-radius:8px; padding:6px 10px; cursor:pointer; }
     .toolbar button:hover { background:#2b3648; }
     #viewport {
-      height: 75vh;
+      height: 82vh;
       border:1px solid #334155;
       border-radius:10px;
       overflow: hidden;
@@ -136,7 +136,7 @@ flowchart LR
 
     subgraph IN[📩 Intake Lane]
       A[Message arrives]
-      B[Parse metadata<br/>channel/reply/history]
+      B[Parse metadata: channel + reply + history]
       C[Intent extraction]
       A --> B --> C
     end
@@ -144,7 +144,7 @@ flowchart LR
     subgraph ID[🧭 Identity & Rules Lane]
       D[Load SOUL.md]
       E[Load OPS.md]
-      F[Apply constraints<br/>boundaries + safety + style]
+      F[Apply constraints: boundaries, safety, style]
       D --> E --> F
     end
 
@@ -167,8 +167,8 @@ flowchart LR
 
     subgraph EXEC[⚙️ Execution Lane]
       N{Need tools?}
-      O[Run tools<br/>read/edit/write/exec/browser]
-      P[Validate state<br/>facts vs assumptions vs actions]
+      O[Run tools: read, edit, write, exec, browser]
+      P[Validate state: facts vs assumptions vs actions]
       N -- yes --> O --> P
       N -- no --> P
     end
