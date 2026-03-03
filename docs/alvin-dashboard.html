@@ -88,6 +88,10 @@
         <div class="title">👛 Wallet Snapshot</div>
         <div id="walletSnap" class="small">Loading…</div>
       </div>
+      <div class="card">
+        <div class="title">🎒 Owned Memecoins</div>
+        <div id="ownedMemecoins" class="small">Loading…</div>
+      </div>
     </div>
   </section>
 
@@ -212,6 +216,11 @@ function render(levels, stats){
 
   const ws = stats.wallet || {};
   document.getElementById('walletSnap').innerHTML = `Address: <code>${ws.address || '—'}</code><br>SOL: ${ws.sol ?? '0'}<br>Token accounts: ${ws.tokenCount ?? 0}`;
+
+  const owned = stats.memecoins?.owned || [];
+  document.getElementById('ownedMemecoins').innerHTML = owned.length
+    ? owned.map(x => `• <code>${x.mint}</code>${x.symbol ? ` (${x.symbol})` : ''} — amount: ${x.amount}`).join('<br>')
+    : 'No memecoins owned yet (or none detected).';
 
   document.getElementById('stamp').textContent = `Last update: ${stats.generatedAt || 'unknown'} · Source: public-stats.json + levels.json`;
 }

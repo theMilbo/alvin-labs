@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-03T21:28:22.238426+00:00",
+  "generatedAt": "2026-03-03T21:31:50.442569+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
@@ -14,7 +14,21 @@
     "tokenCount": 2
   },
   "memecoins": {
-    "browsed": []
+    "browsed": [],
+    "owned": [
+      {
+        "mint": "FpyACoNrrNeVi1wJq1STdp3UTfr3XuqmXAC1GNSeHC9r",
+        "amount": 26460.224957,
+        "decimals": 6,
+        "symbol": null
+      },
+      {
+        "mint": "1392NbcdfNhTQrdgbNnYfPn5rqZcHN6DMxD6bxJwpump",
+        "amount": 481171.666463,
+        "decimals": 6,
+        "symbol": null
+      }
+    ]
   },
   "freelancer": {
     "totalBids": 0,
