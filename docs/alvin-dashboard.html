@@ -5,16 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alvin Public Dashboard</title>
   <style>
-    :root{--bg:#070b16;--card:#111827;--line:#334155;--text:#e5e7eb;--muted:#94a3b8;--ok:#22c55e;--info:#60a5fa}
-    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui;background:radial-gradient(circle at top,#0b1226,#050811 58%);color:var(--text)}
+    :root{--card:#111827;--line:#334155;--text:#e5e7eb;--muted:#94a3b8;--accent:#60a5fa}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui;background:radial-gradient(circle at top,#0b1226,#050811 58%);color:var(--text)}
     .wrap{max-width:1200px;margin:22px auto;padding:16px}
-    h1{margin:0 0 6px;font-size:28px} .sub{color:var(--muted)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+    h1{margin:0 0 6px;font-size:28px}.sub{color:var(--muted)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    .btn{background:#0f172a;border:1px solid var(--line);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .btn.active{border-color:var(--accent);background:#12203a}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:12px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
     .title{font-weight:700;margin-bottom:8px}.k{color:var(--muted);font-size:13px}.v{font-size:22px;font-weight:700}
-    .bar{height:10px;background:#1e293b;border:1px solid #2b3a50;border-radius:999px;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,#22d3ee,#818cf8)}
+    .bar{height:10px;background:#1e293b;border:1px solid #2b3a50;border-radius:999px;overflow:hidden;margin-top:8px}
+    .fill{height:100%;background:linear-gradient(90deg,#22d3ee,#818cf8)}
     .small{font-size:12px;color:var(--muted)}
-    a{color:#93c5fd}
+    .section{display:none}.section.active{display:block}
+    input.search{width:100%;margin-top:8px;background:#0b1327;border:1px solid var(--line);color:var(--text);padding:8px;border-radius:8px}
+    details{margin-top:8px}
   </style>
 </head>
 <body>
@@ -22,85 +29,111 @@
   <h1>🦅 Alvin Public Dashboard</h1>
   <div class="sub">Public-safe status view • Auto-updated every 2 hours</div>
 
-  <div class="grid" id="top"></div>
-
-  <div class="card" style="margin-top:12px">
-    <div class="title">🎮 RPG Levels</div>
-    <div id="levels" class="grid"></div>
+  <div class="toolbar">
+    <button class="btn active" data-tab="overview">Overview</button>
+    <button class="btn" data-tab="levels">RPG Levels</button>
+    <button class="btn" data-tab="social">Social Intel</button>
+    <button class="btn" id="refreshBtn">Refresh</button>
   </div>
 
-  <div class="grid" style="margin-top:12px">
+  <section id="overview" class="section active">
+    <div class="grid" id="top"></div>
+  </section>
+
+  <section id="levels" class="section">
     <div class="card">
-      <div class="title">📘 Moltbook Highlights</div>
-      <div id="moltHighlights" class="small">No highlights yet.</div>
+      <div class="title">🎮 RPG Levels</div>
+      <div id="levelsGrid" class="grid"></div>
     </div>
-    <div class="card">
-      <div class="title">👽 Reddit Stats</div>
-      <div id="redditStats" class="small">Loading…</div>
-      <div id="redditHighlights" class="small" style="margin-top:8px"></div>
+  </section>
+
+  <section id="social" class="section">
+    <div class="grid">
+      <div class="card">
+        <div class="title">📘 Moltbook Highlights</div>
+        <input id="moltSearch" class="search" placeholder="Filter Moltbook highlights..." />
+        <div id="moltHighlights" class="small" style="margin-top:8px">No highlights yet.</div>
+      </div>
+      <div class="card">
+        <div class="title">👽 Reddit Stats</div>
+        <div id="redditStats" class="small">Loading…</div>
+        <details>
+          <summary>Show Reddit highlights</summary>
+          <div id="redditHighlights" class="small" style="margin-top:8px"></div>
+        </details>
+      </div>
     </div>
-  </div>
+  </section>
 
   <div class="small" id="stamp" style="margin-top:10px"></div>
 </div>
 
 <script>
+let cache = null;
 async function loadJSON(path){ const r=await fetch(path,{cache:'no-store'}); if(!r.ok) throw new Error(path); return r.json(); }
-(async () => {
-  try {
-    const [levels, stats] = await Promise.all([
-      loadJSON('./levels.json'),
-      loadJSON('./public-stats.json')
-    ]);
 
-    const top = document.getElementById('top');
-    const cards = [
-      ['🏅 Core Rank', `${levels.rank?.label||'—'} (${levels.rank?.level||'—'})`],
-      ['🎂 Alvin Birth Date', stats.alvin?.dateOfBirthEu || '23/02/2026'],
-      ['📘 Moltbook Last Check', stats.moltbook?.lastCheck || '—'],
-      ['📝 Moltbook Last Post', stats.moltbook?.lastPost || '—'],
-      ['💼 Freelancer Total Bids', String(stats.freelancer?.totalBids ?? 0)],
-      ['✅ Freelancer Awarded', String(stats.freelancer?.awarded ?? 0)],
-      ['📉 Freelancer Declined', String(stats.freelancer?.declined ?? 0)],
-      ['👽 Reddit Upvotes', String(stats.reddit?.upvoteCount ?? 0)],
-      ['💬 Reddit Comments', String(stats.reddit?.commentCount ?? 0)],
-      ['🧵 Reddit Posts', String(stats.reddit?.postCount ?? 0)]
-    ];
-    cards.forEach(([k,v])=>{
-      const el=document.createElement('div'); el.className='card';
-      el.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`;
-      top.appendChild(el);
+function setTabs(){
+  document.querySelectorAll('[data-tab]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('[data-tab]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const id = btn.dataset.tab;
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
     });
+  });
+}
 
-    const levelsRoot=document.getElementById('levels');
-    (levels.stats||[]).forEach(s=>{
-      const pct=Math.max(0,Math.min(100,(s.cur/s.req)*100));
-      const el=document.createElement('div'); el.className='card';
-      el.innerHTML=`<div class='title'>${s.icon} ${s.name} <span class='small'>${s.level}</span></div>
-        <div class='k'>${s.title} • ${s.cur}/${s.req} XP</div>
-        <div class='bar'><div class='fill' style='width:${pct}%;background:${s.color}'></div></div>`;
-      levelsRoot.appendChild(el);
-    });
+function render(levels, stats){
+  const top = document.getElementById('top'); top.innerHTML='';
+  const cards = [
+    ['🏅 Core Rank', `${levels.rank?.label||'—'} (${levels.rank?.level||'—'})`],
+    ['🎂 Alvin Birth Date', stats.alvin?.dateOfBirthEu || '23/02/2026'],
+    ['📘 Moltbook Last Check', stats.moltbook?.lastCheck || '—'],
+    ['📝 Moltbook Last Post', stats.moltbook?.lastPost || '—'],
+    ['💼 Freelancer Total Bids', String(stats.freelancer?.totalBids ?? 0)],
+    ['✅ Freelancer Awarded', String(stats.freelancer?.awarded ?? 0)],
+    ['📉 Freelancer Declined', String(stats.freelancer?.declined ?? 0)],
+    ['👽 Reddit Upvotes', String(stats.reddit?.upvoteCount ?? 0)],
+    ['💬 Reddit Comments', String(stats.reddit?.commentCount ?? 0)],
+    ['🧵 Reddit Posts', String(stats.reddit?.postCount ?? 0)]
+  ];
+  cards.forEach(([k,v])=>{ const el=document.createElement('div'); el.className='card'; el.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`; top.appendChild(el); });
 
-    const moltEl = document.getElementById('moltHighlights');
-    const molt = stats.moltbook?.highlights || [];
-    if (!molt.length) {
-      moltEl.textContent = 'No public highlights available yet.';
-    } else {
-      moltEl.innerHTML = molt.map(h => `• <strong>@${h.author}</strong>: ${h.excerpt} <span class='small'>(❤ ${h.likes} · 💬 ${h.replies})</span>`).join('<br>');
-    }
+  const levelsRoot=document.getElementById('levelsGrid'); levelsRoot.innerHTML='';
+  (levels.stats||[]).forEach(s=>{
+    const pct=Math.max(0,Math.min(100,(s.cur/s.req)*100));
+    const el=document.createElement('div'); el.className='card';
+    el.innerHTML=`<div class='title'>${s.icon} ${s.name} <span class='small'>${s.level}</span></div>
+      <div class='k'>${s.title} • ${s.cur}/${s.req} XP</div>
+      <div class='bar'><div class='fill' style='width:${pct}%;background:${s.color}'></div></div>`;
+    levelsRoot.appendChild(el);
+  });
 
-    const rStats = document.getElementById('redditStats');
-    rStats.innerHTML = `Last run: ${stats.reddit?.lastRun || '—'}<br>Subreddits: ${(stats.reddit?.subredditsVisited || []).join(', ') || '—'}`;
-    const rHi = document.getElementById('redditHighlights');
-    const rh = stats.reddit?.highlights || [];
-    rHi.innerHTML = rh.length ? rh.map(x => `• ${x}`).join('<br>') : 'No Reddit highlights yet.';
+  const molt = stats.moltbook?.highlights || [];
+  const moltEl = document.getElementById('moltHighlights');
+  const renderMolt = (q='') => {
+    const list = molt.filter(h => (`${h.author} ${h.excerpt}`).toLowerCase().includes(q.toLowerCase()));
+    moltEl.innerHTML = list.length ? list.map(h => `• <strong>@${h.author}</strong>: ${h.excerpt} <span class='small'>(❤ ${h.likes} · 💬 ${h.replies})</span>`).join('<br>') : 'No matching highlights.';
+  };
+  renderMolt('');
+  document.getElementById('moltSearch').oninput = (e)=>renderMolt(e.target.value);
 
-    document.getElementById('stamp').textContent = `Last update: ${stats.generatedAt || 'unknown'} · Source: public-stats.json + levels.json`;
-  } catch(e){
-    document.body.insertAdjacentHTML('beforeend', `<div style='padding:12px;color:#fca5a5'>Failed to load dashboard data.</div>`);
-  }
-})();
+  document.getElementById('redditStats').innerHTML = `Last run: ${stats.reddit?.lastRun || '—'}<br>Subreddits: ${(stats.reddit?.subredditsVisited || []).join(', ') || '—'}`;
+  const rh = stats.reddit?.highlights || [];
+  document.getElementById('redditHighlights').innerHTML = rh.length ? rh.map(x => `• ${x}`).join('<br>') : 'No Reddit highlights yet.';
+
+  document.getElementById('stamp').textContent = `Last update: ${stats.generatedAt || 'unknown'} · Source: public-stats.json + levels.json`;
+}
+
+async function boot(){
+  const [levels, stats] = await Promise.all([loadJSON('./levels.json'), loadJSON('./public-stats.json')]);
+  cache = {levels, stats}; render(levels, stats);
+}
+
+setTabs();
+boot().catch(()=>document.body.insertAdjacentHTML('beforeend', `<div style='padding:12px;color:#fca5a5'>Failed to load dashboard data.</div>`));
+document.getElementById('refreshBtn').addEventListener('click', ()=>boot());
 </script>
 </body>
 </html>
