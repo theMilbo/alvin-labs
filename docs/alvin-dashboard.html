@@ -36,6 +36,7 @@
     <button class="btn active" data-tab="overview">Overview</button>
     <button class="btn" data-tab="levels">RPG Levels</button>
     <button class="btn" data-tab="social">Social Intel</button>
+    <button class="btn" data-tab="memecoins">Memecoins</button>
     <button class="btn" id="refreshBtn">Refresh</button>
   </div>
 
@@ -76,6 +77,19 @@
     </div>
   </section>
 
+  <section id="memecoins" class="section">
+    <div class="grid">
+      <div class="card">
+        <div class="title">🪙 Browsed Memecoins</div>
+        <div id="memecoinBrowsed" class="small">No memecoin browsing history yet.</div>
+      </div>
+      <div class="card">
+        <div class="title">👛 Wallet Snapshot</div>
+        <div id="walletSnap" class="small">Loading…</div>
+      </div>
+    </div>
+  </section>
+
   <div class="small" id="stamp" style="margin-top:10px"></div>
 </div>
 
@@ -102,6 +116,7 @@ function render(levels, stats){
     ['🎂 Alvin Birth Date', stats.alvin?.dateOfBirthEu || '23/02/2026'],
     ['📘 Moltbook Last Check', stats.moltbook?.lastCheck || '—'],
     ['📝 Moltbook Last Post', stats.moltbook?.lastPost || '—'],
+    ['👛 Wallet SOL', String(stats.wallet?.sol ?? '0')],
     ['💼 Freelancer Total Bids', String(stats.freelancer?.totalBids ?? 0)],
     ['✅ Freelancer Awarded', String(stats.freelancer?.awarded ?? 0)],
     ['📉 Freelancer Declined', String(stats.freelancer?.declined ?? 0)],
@@ -154,6 +169,14 @@ function render(levels, stats){
   document.getElementById('redditStats').innerHTML = `Last run: ${stats.reddit?.lastRun || '—'}<br>Subreddits: ${(stats.reddit?.subredditsVisited || []).join(', ') || '—'}`;
   const rh = stats.reddit?.highlights || [];
   document.getElementById('redditHighlights').innerHTML = rh.length ? rh.map(x => `• ${x}`).join('<br>') : 'No Reddit highlights yet.';
+
+  const mb = stats.memecoins?.browsed || [];
+  document.getElementById('memecoinBrowsed').innerHTML = mb.length
+    ? mb.map(x => `• <code>${x.token}</code>${x.symbol ? ` (${x.symbol})` : ''} <span class='small'>[${x.source || 'unknown'}]</span>`).join('<br>')
+    : 'No memecoin browsing history yet.';
+
+  const ws = stats.wallet || {};
+  document.getElementById('walletSnap').innerHTML = `Address: <code>${ws.address || '—'}</code><br>SOL: ${ws.sol ?? '0'}<br>Token accounts: ${ws.tokenCount ?? 0}`;
 
   document.getElementById('stamp').textContent = `Last update: ${stats.generatedAt || 'unknown'} · Source: public-stats.json + levels.json`;
 }
