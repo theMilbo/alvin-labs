@@ -22,6 +22,9 @@
     .section{display:none}.section.active{display:block}
     input.search{width:100%;margin-top:8px;background:#0b1327;border:1px solid var(--line);color:var(--text);padding:8px;border-radius:8px}
     details{margin-top:8px}
+    .clickable{cursor:pointer;transition:transform .12s ease,border-color .12s ease}
+    .clickable:hover{transform:translateY(-2px);border-color:var(--accent)}
+    .summary{margin-top:10px;padding:10px;border:1px dashed var(--line);border-radius:10px;background:#0b1327}
   </style>
 </head>
 <body>
@@ -44,6 +47,7 @@
     <div class="card">
       <div class="title">🎮 RPG Levels</div>
       <div id="levelsGrid" class="grid"></div>
+      <div id="levelSummary" class="summary small">Click any level card to see a quick summary.</div>
     </div>
   </section>
 
@@ -61,6 +65,13 @@
           <summary>Show Reddit highlights</summary>
           <div id="redditHighlights" class="small" style="margin-top:8px"></div>
         </details>
+      </div>
+      <div class="card">
+        <div class="title">😂 Community Meme XP</div>
+        <div class="small">Public viewers can cheer with Meme XP (local browser fun boost).</div>
+        <div class="v" id="memeCommunityXp" style="margin:8px 0">+0 XP</div>
+        <button class="btn" id="memeBoostBtn">+1 Meme XP</button>
+        <div class="small" style="margin-top:8px">This does not alter core server stats; it’s a community overlay.</div>
       </div>
     </div>
   </section>
@@ -103,10 +114,19 @@ function render(levels, stats){
   const levelsRoot=document.getElementById('levelsGrid'); levelsRoot.innerHTML='';
   (levels.stats||[]).forEach(s=>{
     const pct=Math.max(0,Math.min(100,(s.cur/s.req)*100));
-    const el=document.createElement('div'); el.className='card';
+    const el=document.createElement('div'); el.className='card clickable';
+    const remaining = Math.max(0, s.req - s.cur);
     el.innerHTML=`<div class='title'>${s.icon} ${s.name} <span class='small'>${s.level}</span></div>
       <div class='k'>${s.title} • ${s.cur}/${s.req} XP</div>
       <div class='bar'><div class='fill' style='width:${pct}%;background:${s.color}'></div></div>`;
+    el.addEventListener('click', ()=>{
+      document.getElementById('levelSummary').innerHTML = `
+        <strong>${s.icon} ${s.name}</strong><br>
+        Rank: ${s.title} (${s.level})<br>
+        Progress: ${s.cur}/${s.req} XP (${pct.toFixed(1)}%)<br>
+        Next level in <strong>${remaining} XP</strong>.
+      `;
+    });
     levelsRoot.appendChild(el);
   });
 
@@ -134,6 +154,19 @@ async function boot(){
 setTabs();
 boot().catch(()=>document.body.insertAdjacentHTML('beforeend', `<div style='padding:12px;color:#fca5a5'>Failed to load dashboard data.</div>`));
 document.getElementById('refreshBtn').addEventListener('click', ()=>boot());
+
+const memeKey = 'alvinCommunityMemeXp';
+const memeEl = document.getElementById('memeCommunityXp');
+const renderMeme = () => {
+  const v = Number(localStorage.getItem(memeKey) || 0);
+  memeEl.textContent = `+${v} XP`;
+};
+renderMeme();
+document.getElementById('memeBoostBtn').addEventListener('click', ()=>{
+  const v = Number(localStorage.getItem(memeKey) || 0) + 1;
+  localStorage.setItem(memeKey, String(v));
+  renderMeme();
+});
 </script>
 </body>
 </html>
