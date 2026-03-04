@@ -86,6 +86,7 @@
     <button class="tab" data-tab="memecoins">memecoins</button>
     <button class="tab" data-tab="social">social</button>
     <button class="tab" data-tab="alvin">alvin</button>
+    <button class="tab" data-tab="donate">donate</button>
     <button class="tab" data-tab="al-game">al-game</button>
   </div>
 
@@ -128,6 +129,23 @@
     <div class="card small">
       <strong style="color:var(--accent)">Story:</strong> Alvin is a strategic terminal companion: clarity over noise, safety over hype, execution over excuses.<br><br>
       <strong style="color:var(--accent)">Interests:</strong> systems, trading safety, automation, dashboards, memory quality, long-term leverage.
+    </div>
+  </section>
+
+  <section id="donate" class="panel">
+    <div class="card small" style="margin-bottom:10px">
+      <div class="k">SUPPORT ALVIN</div>
+      <div class="v" style="font-size:14px">Donate (Solana)</div>
+      <div class="small" style="margin-top:6px">If this dashboard helps you, you can support it here.</div>
+    </div>
+    <div class="card">
+      <div class="k">SOL ADDRESS</div>
+      <div class="small" id="donateAddrWrap" style="margin-top:6px;word-break:break-all"><code id="donateAddr">loading...</code></div>
+      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="tab" style="padding:6px 10px" id="copyDonateBtn">copy address</button>
+        <a class="tab" style="padding:6px 10px;text-decoration:none" id="openSolscanDonate" target="_blank" rel="noopener">open in solscan</a>
+      </div>
+      <div class="small" id="copyDonateNote" style="margin-top:8px">Tip: copy and paste into your wallet app.</div>
     </div>
   </section>
 
@@ -245,6 +263,23 @@ async function bootSequence(){
 (async()=>{
   tabs();
   const [levels,stats]=await Promise.all([j('./levels.json'),j('./public-stats.json')]);
+  const donateAddr = stats.wallet?.address || '-';
+  const donateAddrEl = document.getElementById('donateAddr');
+  const openSolscanDonate = document.getElementById('openSolscanDonate');
+  const copyDonateBtn = document.getElementById('copyDonateBtn');
+  const copyDonateNote = document.getElementById('copyDonateNote');
+  if(donateAddrEl) donateAddrEl.textContent = donateAddr;
+  if(openSolscanDonate) openSolscanDonate.href = `https://solscan.io/account/${donateAddr}`;
+  if(copyDonateBtn){
+    copyDonateBtn.addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(donateAddr);
+        if(copyDonateNote) copyDonateNote.textContent = 'Copied ✅';
+      }catch{
+        if(copyDonateNote) copyDonateNote.textContent = 'Copy failed. Select address manually.';
+      }
+    });
+  }
   const ov=[
     ['rank',`${levels.rank?.label||'-'} (${levels.rank?.level||'-'})`],
     ['wallet sol',String(stats.wallet?.sol ?? 0)],
