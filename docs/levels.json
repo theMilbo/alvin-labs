@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-04T11:10:03+01:00",
+  "updatedAt": "2026-03-04T12:14:24+01:00",
   "xpSystem": {
     "name": "alvin-rs-curve",
     "formula": "XP(L)=floor((1/4)*sum_{n=1..L-1} floor(n+300*2^(n/7)))",
@@ -7,27 +7,27 @@
   },
   "rank": {
     "label": "\ud83e\udea8 Initiate",
-    "level": "L2"
+    "level": "L3"
   },
-  "recentQuest": "XP/Combat system sync for terminal",
-  "nextMilestone": "Push Crypto and Coding to next level bands",
+  "recentQuest": "Terminal overhaul + level sync",
+  "nextMilestone": "Continue climbing Combat and skill milestones",
   "stats": [
     {
       "icon": "\ud83e\udd85",
       "name": "Core Lvl",
-      "level": "L2",
+      "level": "L3",
       "title": "\ud83e\udea8 Initiate",
-      "cur": 95.0,
+      "cur": 27.5,
       "req": 100,
       "color": "linear-gradient(90deg,#22d3ee,#818cf8)"
     },
     {
       "icon": "\ud83e\udde9",
       "name": "Problem Solving",
-      "level": "L3",
+      "level": "L4",
       "title": "",
-      "cur": 242,
-      "req": 276,
+      "cur": 277.0,
+      "req": 388.0,
       "color": "linear-gradient(90deg,#22c55e,#84cc16)"
     },
     {
@@ -35,8 +35,8 @@
       "name": "Coding",
       "level": "L3",
       "title": "",
-      "cur": 214,
-      "req": 276,
+      "cur": 214.0,
+      "req": 276.0,
       "color": "linear-gradient(90deg,#34d399,#10b981)"
     },
     {
@@ -44,8 +44,8 @@
       "name": "Memory",
       "level": "L2",
       "title": "",
-      "cur": 119,
-      "req": 174,
+      "cur": 119.0,
+      "req": 174.0,
       "color": "linear-gradient(90deg,#60a5fa,#22d3ee)"
     },
     {
@@ -53,8 +53,8 @@
       "name": "History",
       "level": "L2",
       "title": "",
-      "cur": 166,
-      "req": 174,
+      "cur": 166.0,
+      "req": 174.0,
       "color": "linear-gradient(90deg,#f59e0b,#fbbf24)"
     },
     {
@@ -62,8 +62,8 @@
       "name": "Psychological Knowledge",
       "level": "L1",
       "title": "",
-      "cur": 32,
-      "req": 83,
+      "cur": 32.0,
+      "req": 83.0,
       "color": "linear-gradient(90deg,#c084fc,#818cf8)"
     },
     {
@@ -71,8 +71,8 @@
       "name": "Memes",
       "level": "L2",
       "title": "",
-      "cur": 120,
-      "req": 174,
+      "cur": 120.0,
+      "req": 174.0,
       "color": "linear-gradient(90deg,#f472b6,#fb7185)"
     },
     {
@@ -80,9 +80,18 @@
       "name": "Crypto",
       "level": "L1",
       "title": "",
-      "cur": 36,
-      "req": 83,
+      "cur": 36.0,
+      "req": 83.0,
       "color": "linear-gradient(90deg,#f59e0b,#fbbf24)"
+    },
+    {
+      "icon": "\ud83c\udf0d",
+      "name": "Common Knowledge",
+      "level": "L1",
+      "title": "",
+      "cur": 24.0,
+      "req": 83.0,
+      "color": "linear-gradient(90deg,#22d3ee,#34d399)"
     }
   ]
 }
