@@ -1,22 +1,52 @@
 {
-  "generatedAt": "2026-03-04T21:04:31.272104+00:00",
+  "generatedAt": "2026-03-04T23:04:24.916856+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772656938,
+    "lastCheck": 1772658737,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.037079775,
-    "solPriceUsd": 92.69,
-    "solValueUsd": 3.43692434475,
+    "solPriceUsd": 91.26,
+    "solValueUsd": 3.3839002665000004,
     "tokenCount": 4
   },
   "memecoins": {
     "browsed": [
+      {
+        "token": "BoRiiSZ4hqtbCnQc7cWaEYTEtxmzRXyy5xaKCt7Ppump",
+        "symbol": "UNTAXED",
+        "at": "2026-03-04T22:34:36.605Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "5HV956n7UQT1XdJzv43fHPocest5YAmi9ipsuiJx7zt7",
+        "symbol": "memecoin",
+        "at": "2026-03-04T22:34:36.605Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "5LS3ips7jWxfuVHzoMzKzp3cCwjH9zmrtYXmYBVGpump",
+        "symbol": "Oil",
+        "at": "2026-03-04T22:34:36.605Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "4daoTLufDmV3ods48Zh8rymaZKBLtgEvuH9qALYLbonk",
+        "symbol": "memecoin",
+        "at": "2026-03-04T22:34:36.605Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "Ho5nr7Muzuw2jQw693dBVqj2g8JBJhQLZ717xniGpump",
+        "symbol": "MMFA",
+        "at": "2026-03-04T22:34:36.604Z",
+        "source": "pump_scan"
+      },
       {
         "token": "61876930468349272478588823528448567520448135824570000000000000000000000000000",
         "at": "2026-03-04T20:33:58.406Z",
@@ -90,38 +120,9 @@
         "source": "pump_scan"
       },
       {
-        "token": "BoRiiSZ4hqtbCnQc7cWaEYTEtxmzRXyy5xaKCt7Ppump",
-        "symbol": "UNTAXED",
-        "at": "2026-03-04T18:34:08.634Z",
-        "source": "pump_scan"
-      },
-      {
         "token": "BELjeL4EhPUa8doduMSZz8RCPGRGR98kLcruDb2jpump",
         "symbol": "SOLSIM",
         "at": "2026-03-04T18:34:08.634Z",
-        "source": "pump_scan"
-      },
-      {
-        "token": "HWJACCr456TxQtDv89xG8J4TuK1U6zHTxbTNXttgpump",
-        "symbol": "Solana",
-        "at": "2026-03-04T18:34:08.633Z",
-        "source": "pump_scan"
-      },
-      {
-        "token": "3Fc12eM6zm5a7oDQwAahUhkzFipRb1PyJfHvnJNp8FQY",
-        "at": "2026-03-04T18:33:33.870Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "5LS3ips7jWxfuVHzoMzKzp3cCwjH9zmrtYXmYBVGpump",
-        "symbol": "Oil",
-        "at": "2026-03-04T16:34:31.509Z",
-        "source": "pump_scan"
-      },
-      {
-        "token": "JRWePwBBtPPR14ersumZWK24vyRYdB8LT2RkV9hmoon",
-        "symbol": "MEMEWAR",
-        "at": "2026-03-04T16:34:31.509Z",
         "source": "pump_scan"
       }
     ],
@@ -131,8 +132,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.004523,
-        "valueUsd": 1.381842287035,
+        "priceUsd": 0.005762,
+        "valueUsd": 1.76037480829,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -140,8 +141,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05247,
-        "valueUsd": 0.5667262978469401,
+        "priceUsd": 0.05153,
+        "valueUsd": 0.55657339676106,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
