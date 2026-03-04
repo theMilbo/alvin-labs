@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-04T10:04:02.987134+00:00",
+  "generatedAt": "2026-03-04T11:04:24.357747+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
@@ -11,35 +11,40 @@
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.051124055,
-    "solPriceUsd": 90.63,
-    "solValueUsd": 4.6333731046499995,
+    "solPriceUsd": 90.32,
+    "solValueUsd": 4.6175246476,
     "tokenCount": 3
   },
   "memecoins": {
     "browsed": [
       {
+        "token": "BoRiiSZ4hqtbCnQc7cWaEYTEtxmzRXyy5xaKCt7Ppump",
+        "symbol": "UNTAXED",
+        "at": "2026-03-04T10:33:37.733Z",
+        "source": "pump_scan"
+      },
+      {
         "token": "J3mTHLJ3GMcz9ycfvUji5HzeuTvmUQjQSdzChsS5pump",
         "symbol": "SOLBISCUIT",
-        "at": "2026-03-04T09:44:10.344Z",
+        "at": "2026-03-04T10:33:37.733Z",
         "source": "pump_scan"
       },
       {
         "token": "H4phNbsqjV5rqk8u6FUACTLB6rNZRTAPGnBb8KXJpump",
         "symbol": "SSE",
-        "at": "2026-03-04T09:44:10.344Z",
+        "at": "2026-03-04T10:33:37.733Z",
         "source": "pump_scan"
       },
       {
         "token": "DRLNhjM7jusYFPF1qade1dBD1qhgds7oAfdKs51Vpump",
         "symbol": "SOL",
-        "at": "2026-03-04T09:44:10.344Z",
+        "at": "2026-03-04T10:33:37.733Z",
         "source": "pump_scan"
       },
       {
-        "token": "BoRiiSZ4hqtbCnQc7cWaEYTEtxmzRXyy5xaKCt7Ppump",
-        "symbol": "UNTAXED",
-        "at": "2026-03-04T09:44:10.344Z",
-        "source": "pump_scan"
+        "token": "HqvG8g7W1j8PbHSudfwaiAQ5wA4tb3AqQmbX5HEbpump",
+        "at": "2026-03-04T10:33:34.663Z",
+        "source": "dex_token"
       },
       {
         "token": "HipBJXwzR6U8bUeUC38R38NE44PZLp1e6MW64RwZpump",
@@ -116,11 +121,6 @@
         "token": "SNS8DJbHc34nKySHVhLGMUUE72ho6igvJaxtq9T3cX3",
         "at": "2026-03-04T09:34:42.223Z",
         "source": "dex_token"
-      },
-      {
-        "token": "AWpD39myXc7emw5M9cMCofkbo92x5FKWdGHWYpZFdoge",
-        "at": "2026-03-04T09:34:41.656Z",
-        "source": "dex_token"
       }
     ],
     "owned": [
@@ -129,8 +129,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05037,
-        "valueUsd": 0.5440442847827399,
+        "priceUsd": 0.04991,
+        "valueUsd": 0.53907584382582,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
