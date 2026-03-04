@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alvin History Library</title>
+  <style>
+    :root{--bg:#0b1020;--card:#121a2f;--line:#2a3657;--text:#e6ecff;--muted:#9fb0db;--accent:#7aa2ff}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui;background:radial-gradient(circle at top,#131d3b,#0b1020 62%);color:var(--text)}
+    .wrap{max-width:1140px;margin:26px auto;padding:16px}
+    h1{margin:0 0 6px}.sub{color:var(--muted);margin-bottom:14px}
+    .bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .input,.select,.btn{background:#0e1730;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+    .input{flex:1;min-width:260px}
+    .btn{cursor:pointer}
+    .btn.active{border-color:var(--accent);box-shadow:0 0 0 1px rgba(122,162,255,.35) inset}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+    .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+    .title{font-weight:700;margin:6px 0 4px}
+    .meta{font-size:12px;color:var(--muted)}
+    a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+    .tag{display:inline-block;font-size:11px;color:#d4ddff;border:1px solid #3a4a73;background:#182545;border-radius:999px;padding:2px 8px;margin:6px 5px 0 0}
+    .view{display:none}.view.active{display:block}
+    .timeline{position:relative;margin-left:8px;padding-left:18px;border-left:2px solid #304067}
+    .event{position:relative;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;margin:10px 0}
+    .event:before{content:"";position:absolute;left:-24px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    .warn{margin-top:12px;padding:10px;border:1px dashed #496093;border-radius:10px;background:#0f1a33;font-size:13px;color:#c8d5ff;display:none}
+    .warn.active{display:block}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>📚 Alvin History Library</h1>
+    <div class="sub">Searchable research library with timeline mode and source-discipline notes.</div>
+
+    <div class="bar">
+      <input id="q" class="input" placeholder="Search topic, era, disease, war..." />
+      <select id="cat" class="select">
+        <option value="all">All categories</option>
+        <option value="ancient">Ancient</option>
+        <option value="medieval">Medieval</option>
+        <option value="modern">Modern</option>
+        <option value="industry">Industry</option>
+        <option value="ww1">WW1</option>
+        <option value="ww2">WW2</option>
+        <option value="cold-war">Cold War</option>
+        <option value="diseases">Diseases</option>
+        <option value="weimar">Weimar Berlin</option>
+      </select>
+      <button id="gridBtn" class="btn active">Grid</button>
+      <button id="timelineBtn" class="btn">Timeline</button>
+      <button id="claimsBtn" class="btn">Claims vs Verified</button>
+    </div>
+
+    <div id="claimsPanel" class="warn">
+      <strong>Claims vs Verified Sources:</strong> treat politically charged allegations with source discipline.
+      Prefer primary documents, legal records, and independent historians. Flag propaganda-era claims that lack corroboration.
+    </div>
+
+    <div id="gridView" class="view active">
+      <div id="cards" class="grid"></div>
+    </div>
+
+    <div id="timelineView" class="view">
+      <div id="timeline" class="timeline"></div>
+    </div>
+  </div>
+
+<script>
+const docs = [
+  {cat:'ancient', year:476, title:'Fall of the Western Roman Empire', file:'ancient/fall-of-western-rome.md', tags:['rome','collapse','late-antiquity']},
+  {cat:'medieval', year:1347, title:'Black Death (1347–1351)', file:'medieval/black-death-1347-1351.md', tags:['plague','pandemic','europe']},
+  {cat:'modern', year:1789, title:'French Revolution (1789–1799)', file:'modern/french-revolution-1789-1799.md', tags:['revolution','rights','france']},
+  {cat:'industry', year:1760, title:'British Industrial Revolution', file:'industry/british-industrial-revolution.md', tags:['industry','economics','technology']},
+  {cat:'ww1', year:1914, title:'World War I Overview', file:'ww1/world-war-i-overview.md', tags:['war','europe','1914-1918']},
+  {cat:'weimar', year:1930, title:'Berlin 1930–1933 + Hirschfeld', file:'weimar-berlin-1930-1933.md', tags:['weimar','berlin','hirschfeld']},
+  {cat:'ww2', year:1939, title:'World War II Overview', file:'ww2/world-war-ii-overview.md', tags:['war','global','1939-1945']},
+  {cat:'cold-war', year:1947, title:'Cold War Overview', file:'cold-war/cold-war-overview.md', tags:['geopolitics','nuclear','proxy-wars']},
+  {cat:'diseases', year:2026, title:'Disease Causes/Treatments Overview', file:'diseases/disease-causes-treatments-overview.md', tags:['medicine','public-health','treatment']},
+  {cat:'all', year:2026, title:'History Index', file:'index.md', tags:['index','tags','overview']}
+];
+
+const cards = document.getElementById('cards');
+const timeline = document.getElementById('timeline');
+const q = document.getElementById('q');
+const cat = document.getElementById('cat');
+const gridBtn = document.getElementById('gridBtn');
+const timelineBtn = document.getElementById('timelineBtn');
+const claimsBtn = document.getElementById('claimsBtn');
+const gridView = document.getElementById('gridView');
+const timelineView = document.getElementById('timelineView');
+const claimsPanel = document.getElementById('claimsPanel');
+
+function filterDocs(){
+  const query = q.value.trim().toLowerCase();
+  const chosen = cat.value;
+  return docs.filter(d=>{
+    const inCat = chosen === 'all' || d.cat === chosen;
+    const hay = `${d.title} ${d.cat} ${d.file} ${d.tags.join(' ')}`.toLowerCase();
+    const inQ = !query || hay.includes(query);
+    return inCat && inQ;
+  });
+}
+
+function renderGrid(){
+  const filtered = filterDocs();
+  cards.innerHTML = filtered.map(d=>`<article class="card">
+    <div class="k">${d.cat}</div>
+    <div class="title">${d.title}</div>
+    <div class="meta">${d.year ? `Era marker: ${d.year} • ` : ''}<a href="./${d.file}" target="_blank" rel="noopener">Open markdown ↗</a></div>
+    <div>${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+  </article>`).join('') || `<div class="card">No matches found.</div>`;
+}
+
+function renderTimeline(){
+  const filtered = filterDocs().filter(d=>d.year).sort((a,b)=>a.year-b.year);
+  timeline.innerHTML = filtered.map(d=>`<div class="event">
+    <div class="k">${d.cat}</div>
+    <div class="title">${d.year}: ${d.title}</div>
+    <div class="meta"><a href="./${d.file}" target="_blank" rel="noopener">Open entry ↗</a></div>
+  </div>`).join('') || `<div class="event">No timeline matches.</div>`;
+}
+
+function setView(mode){
+  const isGrid = mode === 'grid';
+  gridBtn.classList.toggle('active', isGrid);
+  timelineBtn.classList.toggle('active', !isGrid);
+  gridView.classList.toggle('active', isGrid);
+  timelineView.classList.toggle('active', !isGrid);
+}
+
+q.addEventListener('input', ()=>{renderGrid();renderTimeline();});
+cat.addEventListener('change', ()=>{renderGrid();renderTimeline();});
+gridBtn.addEventListener('click', ()=>setView('grid'));
+timelineBtn.addEventListener('click', ()=>setView('timeline'));
+claimsBtn.addEventListener('click', ()=>{
+  claimsPanel.classList.toggle('active');
+  claimsBtn.classList.toggle('active');
+});
+
+renderGrid();
+renderTimeline();
+</script>
+</body>
+</html>
