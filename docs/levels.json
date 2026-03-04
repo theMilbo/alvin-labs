@@ -1,97 +1,21 @@
 {
-  "updatedAt": "2026-03-04T12:14:24+01:00",
+  "updatedAt": "2026-03-03T22:41:00+01:00",
   "xpSystem": {
     "name": "alvin-rs-curve",
     "formula": "XP(L)=floor((1/4)*sum_{n=1..L-1} floor(n+300*2^(n/7)))",
-    "notes": "Req values represent total XP needed to reach next level. Core uses combat progress %."
+    "notes": "Req values represent XP needed from current level to next level using this curve."
   },
-  "rank": {
-    "label": "\ud83e\udea8 Initiate",
-    "level": "L3"
-  },
-  "recentQuest": "Terminal overhaul + level sync",
-  "nextMilestone": "Continue climbing Combat and skill milestones",
+  "rank": { "label": "🗡️ Operator", "level": "L1" },
+  "recentQuest": "Dashboard + Solana terminal expansion",
+  "nextMilestone": "🧩 Problem Solving needs 11 XP to hit L1",
   "stats": [
-    {
-      "icon": "\ud83e\udd85",
-      "name": "Core Lvl",
-      "level": "L3",
-      "title": "\ud83e\udea8 Initiate",
-      "cur": 27.5,
-      "req": 100,
-      "color": "linear-gradient(90deg,#22d3ee,#818cf8)"
-    },
-    {
-      "icon": "\ud83e\udde9",
-      "name": "Problem Solving",
-      "level": "L4",
-      "title": "",
-      "cur": 277.0,
-      "req": 388.0,
-      "color": "linear-gradient(90deg,#22c55e,#84cc16)"
-    },
-    {
-      "icon": "\ud83d\udcbb",
-      "name": "Coding",
-      "level": "L3",
-      "title": "",
-      "cur": 214.0,
-      "req": 276.0,
-      "color": "linear-gradient(90deg,#34d399,#10b981)"
-    },
-    {
-      "icon": "\ud83e\udde0",
-      "name": "Memory",
-      "level": "L2",
-      "title": "",
-      "cur": 119.0,
-      "req": 174.0,
-      "color": "linear-gradient(90deg,#60a5fa,#22d3ee)"
-    },
-    {
-      "icon": "\ud83d\udcdc",
-      "name": "History",
-      "level": "L2",
-      "title": "",
-      "cur": 166.0,
-      "req": 174.0,
-      "color": "linear-gradient(90deg,#f59e0b,#fbbf24)"
-    },
-    {
-      "icon": "\ud83e\udec0",
-      "name": "Psychological Knowledge",
-      "level": "L1",
-      "title": "",
-      "cur": 32.0,
-      "req": 83.0,
-      "color": "linear-gradient(90deg,#c084fc,#818cf8)"
-    },
-    {
-      "icon": "\ud83d\ude02",
-      "name": "Memes",
-      "level": "L2",
-      "title": "",
-      "cur": 120.0,
-      "req": 174.0,
-      "color": "linear-gradient(90deg,#f472b6,#fb7185)"
-    },
-    {
-      "icon": "\u20bf",
-      "name": "Crypto",
-      "level": "L1",
-      "title": "",
-      "cur": 36.0,
-      "req": 83.0,
-      "color": "linear-gradient(90deg,#f59e0b,#fbbf24)"
-    },
-    {
-      "icon": "\ud83c\udf0d",
-      "name": "Common Knowledge",
-      "level": "L1",
-      "title": "",
-      "cur": 24.0,
-      "req": 83.0,
-      "color": "linear-gradient(90deg,#22d3ee,#34d399)"
-    }
+    { "icon": "🦅", "name": "Core Lvl", "level": "L1", "title": "🗡️ Operator", "cur": 31, "req": 91, "color": "linear-gradient(90deg,#22d3ee,#818cf8)" },
+    { "icon": "🧩", "name": "Problem Solving", "level": "L0", "title": "🪨 Initiate", "cur": 72, "req": 83, "color": "linear-gradient(90deg,#22c55e,#84cc16)" },
+    { "icon": "😂", "name": "Memes", "level": "L0", "title": "🪨 Initiate", "cur": 18, "req": 83, "color": "linear-gradient(90deg,#f472b6,#fb7185)" },
+    { "icon": "📜", "name": "History", "level": "L0", "title": "🪨 Initiate", "cur": 26, "req": 83, "color": "linear-gradient(90deg,#f59e0b,#fbbf24)" },
+    { "icon": "🧠", "name": "Memory", "level": "L1", "title": "🗡️ Operator", "cur": 9, "req": 91, "color": "linear-gradient(90deg,#60a5fa,#22d3ee)" },
+    { "icon": "💻", "name": "Coding", "level": "L0", "title": "🪨 Initiate", "cur": 34, "req": 83, "color": "linear-gradient(90deg,#34d399,#10b981)" },
+    { "icon": "🫀", "name": "Psychological Knowledge", "level": "L0", "title": "🪨 Initiate", "cur": 12, "req": 83, "color": "linear-gradient(90deg,#c084fc,#818cf8)" },
+    { "icon": "₿", "name": "Crypto", "level": "L0", "title": "🪨 Initiate", "cur": 8, "req": 83, "color": "linear-gradient(90deg,#f59e0b,#fbbf24)" }
   ]
 }
