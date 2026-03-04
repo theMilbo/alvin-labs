@@ -133,7 +133,28 @@ function tabs(){
   btns.forEach((b)=>b.onclick=()=>{btns.forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));const panel=document.getElementById(b.dataset.tab);if(panel)panel.classList.add('active');if(b.dataset.tab==='al-game')setTimeout(()=>document.getElementById('gameInp')?.focus(),80);});
   document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();const i=btns.findIndex(x=>x.classList.contains('active'));go(i+1);}else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();const i=btns.findIndex(x=>x.classList.contains('active'));go(i-1);}});
 }
-function fmtUsd(v){return (typeof v==='number')?`$${v.toFixed(2)}`:'n/a'}
+function fmtUsd(v){return (typeof v==='number'&&isFinite(v))?`$${v.toFixed(2)}`:'n/a'}
+function pickBestPair(pairs){
+  if(!Array.isArray(pairs)||!pairs.length) return null;
+  return pairs.slice().sort((a,b)=>(b?.liquidity?.usd||0)-(a?.liquidity?.usd||0))[0];
+}
+async function fetchDexToken(mint){
+  try{
+    const r=await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`,{cache:'no-store'});
+    if(!r.ok) return null;
+    const j=await r.json();
+    const p=pickBestPair(j.pairs);
+    if(!p) return null;
+    return {
+      symbol:p.baseToken?.symbol||null,
+      priceUsd: Number(p.priceUsd||0) || null,
+      marketCap: Number(p.marketCap||p.fdv||0) || null,
+      priceChange1h: typeof p.priceChange?.h1==='number'?p.priceChange.h1:null,
+      priceChange24h: typeof p.priceChange?.h24==='number'?p.priceChange.h24:null,
+      dexUrl:p.url||null
+    };
+  }catch{return null;}
+}
 async function fetchLiveWallet(address){
   if(!address)return null;
   try{
@@ -146,13 +167,16 @@ async function fetchLiveWallet(address){
     return {sol,tokens,fetchedAt:new Date().toISOString().slice(0,19)+'Z'};
   }catch(e){console.warn('Live wallet fetch failed',e);return null;}
 }
-function renderLivePanels(live,stats){
+function renderLivePanels(live,stats,solPriceUsd){
   const grid=document.getElementById('liveSolGrid');
   grid.innerHTML='';
   const sol=live&&typeof live.sol==='number'?live.sol:(Number(stats?.wallet?.sol)||0);
+  const price=(typeof solPriceUsd==='number'&&solPriceUsd>0)?solPriceUsd:Number(stats?.wallet?.solPriceUsd||0);
+  const solUsd = price>0 ? sol*price : Number(stats?.wallet?.solValueUsd||0);
   const card=(k,v,isLive)=>{const d=document.createElement('div');d.className=isLive?'card live-panel':'card';d.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`;return d;};
   grid.appendChild(card(live?'SOL (live)':'SOL',sol.toFixed(6),!!live));
-  grid.appendChild(card('SOL ≈ USD',fmtUsd(stats?.wallet?.solValueUsd),false));
+  grid.appendChild(card('SOL price',price?`$${price.toFixed(2)}`:'n/a',!!solPriceUsd));
+  grid.appendChild(card('SOL ≈ USD',fmtUsd(solUsd),!!solPriceUsd));
   const tokenCount=live&&Array.isArray(live.tokens)?live.tokens.length:(stats?.wallet?.tokenCount??0);
   grid.appendChild(card('Token accounts',String(tokenCount),!!(live&&live.tokens)));
   if(live&&Array.isArray(live.tokens)&&live.tokens.length>0){
@@ -203,15 +227,53 @@ async function bootSequence(){
   document.getElementById('walletMeta').innerHTML=`Address: <code>${stats.wallet?.address||'-'}</code><br>SOL: ${stats.wallet?.sol??0} (${fmtUsd(stats.wallet?.solValueUsd)})`;
   const mt=document.getElementById('memeTable');
   const owned=stats.memecoins?.owned||[];
-  mt.innerHTML = owned.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>mcap</th><th>chg (1h/24h)</th><th>value</th><th>link</th></tr></thead><tbody>${owned.map(x=>`<tr><td><strong>${x.symbol||'MEME'}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof x.priceUsd==='number')?'$'+x.priceUsd.toFixed(8):'n/a'}</td><td>${(typeof x.marketCap==='number')?fmtUsd(x.marketCap):'n/a'}</td><td>${(typeof x.priceChange1h==='number'?(x.priceChange1h>0?'+':'')+x.priceChange1h.toFixed(2)+'%':'n/a')} / ${(typeof x.priceChange24h==='number'?(x.priceChange24h>0?'+':'')+x.priceChange24h.toFixed(2)+'%':'n/a')}</td><td>${(typeof x.valueUsd==='number')?'$'+x.valueUsd.toFixed(4):'n/a'}</td><td>${x.dexUrl?`<a href='${x.dexUrl}' target='_blank' rel='noopener'>open</a>`:'-'}</td></tr>`).join('')}</tbody>` : `<tbody><tr><td class='small'>No owned memecoins yet.</td></tr></tbody>`;
+
+  function renderOwnedTable(rows){
+    mt.innerHTML = rows.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>mcap</th><th>chg (1h/24h)</th><th>value</th><th>link</th></tr></thead><tbody>${rows.map(x=>{
+      const price = (typeof x.livePriceUsd==='number') ? x.livePriceUsd : x.priceUsd;
+      const mcap = (typeof x.liveMarketCap==='number') ? x.liveMarketCap : x.marketCap;
+      const ch1 = (typeof x.livePriceChange1h==='number') ? x.livePriceChange1h : x.priceChange1h;
+      const ch24 = (typeof x.livePriceChange24h==='number') ? x.livePriceChange24h : x.priceChange24h;
+      const val = (typeof price==='number') ? (Number(x.amount||0) * price) : x.valueUsd;
+      const link = x.liveDexUrl || x.dexUrl;
+      const sym = x.liveSymbol || x.symbol || 'MEME';
+      return `<tr><td><strong>${sym}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof price==='number')?'$'+price.toFixed(8):'n/a'}</td><td>${(typeof mcap==='number')?fmtUsd(mcap):'n/a'}</td><td>${(typeof ch1==='number'?(ch1>0?'+':'')+ch1.toFixed(2)+'%':'n/a')} / ${(typeof ch24==='number'?(ch24>0?'+':'')+ch24.toFixed(2)+'%':'n/a')}</td><td>${(typeof val==='number')?'$'+val.toFixed(4):'n/a'}</td><td>${link?`<a href='${link}' target='_blank' rel='noopener'>open</a>`:'-'}</td></tr>`;
+    }).join('')}</tbody>` : `<tbody><tr><td class='small'>No owned memecoins yet.</td></tr></tbody>`;
+  }
 
   const mh=(stats.moltbook?.highlights||[]).map(x=>`• @${x.author}: ${x.excerpt}`).join('<br>') || 'No highlights';
   document.getElementById('molt').innerHTML=`Last check: ${stats.moltbook?.lastCheck||'-'}<br>${mh}`;
   document.getElementById('reddit').innerHTML=`Last run: ${stats.reddit?.lastRun||'-'}<br>Upvotes: ${stats.reddit?.upvoteCount||0} • Comments: ${stats.reddit?.commentCount||0}`;
+
   const addr=stats.wallet?.address;
   let liveWallet=null;
-  if(addr){liveWallet=await fetchLiveWallet(addr);renderLivePanels(liveWallet,stats);}
-  document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json${liveWallet?.fetchedAt?' · live SOL @ '+liveWallet.fetchedAt:''}`;
+  let liveSolPrice=null;
+
+  async function refreshLive(){
+    if(addr) liveWallet = await fetchLiveWallet(addr);
+    const liveRows = [];
+    for (const x of owned){
+      const dex = await fetchDexToken(x.mint);
+      liveRows.push({
+        ...x,
+        liveSymbol: dex?.symbol || null,
+        livePriceUsd: dex?.priceUsd ?? null,
+        liveMarketCap: dex?.marketCap ?? null,
+        livePriceChange1h: dex?.priceChange1h ?? null,
+        livePriceChange24h: dex?.priceChange24h ?? null,
+        liveDexUrl: dex?.dexUrl || null
+      });
+    }
+    const solDex = await fetchDexToken('So11111111111111111111111111111111111111112');
+    liveSolPrice = solDex?.priceUsd ?? null;
+    renderOwnedTable(liveRows);
+    renderLivePanels(liveWallet,stats,liveSolPrice);
+    document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json${liveWallet?.fetchedAt?' · live SOL @ '+liveWallet.fetchedAt:''}${liveSolPrice?' · live SOL price':''}`;
+  }
+
+  renderOwnedTable(owned);
+  await refreshLive();
+  setInterval(refreshLive, 60000);
   await bootSequence();
 
   (function miniGame(){
