@@ -46,6 +46,22 @@
     .game-console .inp input{flex:1;background:#0a0f1a;border:1px solid var(--line);color:var(--text);padding:6px 8px;border-radius:4px;font-family:inherit;font-size:12px}
     .game-console .inp input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(49,255,134,.2)}
     .game-console .inp input::placeholder{color:var(--muted);opacity:.8}
+    .levels-top{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;align-items:stretch}
+    .core-card{flex:1.4;min-width:240px;background:radial-gradient(circle at top,#0f172a,#020617);border-color:#22d3ee;box-shadow:0 0 18px rgba(34,211,238,.35)}
+    .core-label{font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+    .core-level{font-size:24px;color:var(--accent);margin-top:2px}
+    .core-sub{font-size:12px;color:var(--muted);margin:6px 0 8px}
+    .xp-bar{position:relative;height:8px;border-radius:999px;background:#020617;border:1px solid #1d2939;overflow:hidden;margin-top:2px}
+    .xp-bar-fill{height:100%;width:0;background:var(--accent);box-shadow:0 0 8px rgba(49,255,134,.5);transition:width .35s ease-out}
+    .levels-board{border:1px solid #1b2538;border-radius:10px;padding:10px;margin-top:4px;background:repeating-linear-gradient(to bottom,rgba(15,23,42,.96) 0,rgba(15,23,42,.96) 22px,rgba(15,23,42,1) 22px,rgba(15,23,42,1) 44px)}
+    .levels-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+    .level-card{cursor:pointer;position:relative}
+    .level-card:hover{border-color:#334155;box-shadow:0 4px 14px rgba(8,18,32,.7)}
+    .level-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:12px}
+    .level-icon{margin-right:4px}
+    .level-name{flex:1;color:var(--text)}
+    .level-tag{font-size:11px;color:var(--muted);padding:2px 6px;border-radius:999px;border:1px solid #1f2937}
+    .level-meta{margin-top:6px}
   </style>
 </head>
 <body>
@@ -79,8 +95,21 @@
   </section>
 
   <section id="levels" class="panel">
-    <div class="grid" id="lvlGrid"></div>
-    <div class="card small" id="lvlMeta" style="margin-top:10px">Select a level card.</div>
+    <div class="levels-top">
+      <div class="card core-card" id="coreCard">
+        <div class="core-label">CORE COMBAT</div>
+        <div class="core-level">--</div>
+        <div class="core-sub">Syncing level matrix…</div>
+        <div class="xp-bar"><div class="xp-bar-fill" style="width:0%"></div></div>
+      </div>
+      <div class="card small" id="lvlMeta">
+        <div class="k">Next milestone</div>
+        <div class="small">Loading level data…</div>
+      </div>
+    </div>
+    <div class="levels-board">
+      <div class="levels-grid" id="lvlGrid"></div>
+    </div>
   </section>
 
   <section id="memecoins" class="panel">
@@ -133,7 +162,7 @@ function tabs(){
   btns.forEach((b)=>b.onclick=()=>{btns.forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));const panel=document.getElementById(b.dataset.tab);if(panel)panel.classList.add('active');if(b.dataset.tab==='al-game')setTimeout(()=>document.getElementById('gameInp')?.focus(),80);});
   document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();const i=btns.findIndex(x=>x.classList.contains('active'));go(i+1);}else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();const i=btns.findIndex(x=>x.classList.contains('active'));go(i-1);}});
 }
-function fmtUsd(v){return (typeof v==='number'&&isFinite(v))?`$${v.toFixed(2)}`:'n/a'}
+function fmtUsd(v){const n=typeof v==='number'?v:(v!=null?Number(v):NaN);return Number.isFinite(n)?`$${n.toFixed(2)}`:'n/a'}
 function pickBestPair(pairs){
   if(!Array.isArray(pairs)||!pairs.length) return null;
   return pairs.slice().sort((a,b)=>(b?.liquidity?.usd||0)-(a?.liquidity?.usd||0))[0];
@@ -145,12 +174,20 @@ async function fetchDexToken(mint){
     const j=await r.json();
     const p=pickBestPair(j.pairs);
     if(!p) return null;
+    const rawPrice=p.priceUsd??p.priceNative??null;
+    const priceUsd=rawPrice!=null?Number(rawPrice):null;
+    const rawMcap=p.marketCap??p.fdv??null;
+    const marketCap=rawMcap!=null?Number(rawMcap):null;
+    const raw1h=p.priceChange?.h1??null;
+    const raw24h=p.priceChange?.h24??null;
+    const priceChange1h=raw1h!=null?Number(raw1h):null;
+    const priceChange24h=raw24h!=null?Number(raw24h):null;
     return {
-      symbol:p.baseToken?.symbol||null,
-      priceUsd: Number(p.priceUsd||0) || null,
-      marketCap: Number(p.marketCap||p.fdv||0) || null,
-      priceChange1h: typeof p.priceChange?.h1==='number'?p.priceChange.h1:null,
-      priceChange24h: typeof p.priceChange?.h24==='number'?p.priceChange.h24:null,
+      symbol:p.baseToken?.symbol||p.baseToken?.address||null,
+      priceUsd:Number.isFinite(priceUsd)?priceUsd:null,
+      marketCap:Number.isFinite(marketCap)?marketCap:null,
+      priceChange1h:Number.isFinite(priceChange1h)?priceChange1h:null,
+      priceChange24h:Number.isFinite(priceChange24h)?priceChange24h:null,
       dexUrl:p.url||null
     };
   }catch{return null;}
@@ -222,24 +259,72 @@ async function bootSequence(){
   ov.forEach(([k,v])=>{const d=document.createElement('div');d.className='card';d.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`;og.appendChild(d);});
 
   const lg=document.getElementById('lvlGrid');
-  (levels.stats||[]).forEach(s=>{const p=Math.max(0,Math.min(100,(s.cur/s.req)*100));const d=document.createElement('div');d.className='card';d.innerHTML=`<div class='k'>${s.icon} ${s.name}</div><div class='v'>${s.cur}/${s.req}</div><div class='small'>${s.level} • ${p.toFixed(1)}%</div>`;d.onclick=()=>document.getElementById('lvlMeta').innerHTML=`${s.icon} <strong>${s.name}</strong> — ${s.title} (${s.level}) · ${s.cur}/${s.req} XP`;lg.appendChild(d);});
+  const lvlMeta=document.getElementById('lvlMeta');
+  const coreCard=document.getElementById('coreCard');
+
+  function updateLvlMeta(s,p){
+    if(!lvlMeta)return;
+    const cur=typeof s.cur==='number'?s.cur:Number(s.cur||0);
+    const req=typeof s.req==='number'?s.req:Number(s.req||0);
+    const remaining=req>0?Math.max(0,req-cur):null;
+    lvlMeta.innerHTML=`<div class='k'>Next milestone</div><div class='small'><strong>${s.icon||''} ${s.name||''}</strong><br>Level: ${s.level||'-'}<br>Progress: ${p.toFixed(1)}% (${cur}/${req} XP)<br>XP to next: ${remaining!=null&&Number.isFinite(remaining)?remaining.toFixed(1):'n/a'}</div>`;
+  }
+
+  const statsList=Array.isArray(levels.stats)?levels.stats:[];
+  const core=statsList.find(s=>/core/i.test(String(s.name||'')))||statsList[0]||null;
+
+  if(core&&coreCard){
+    const cur=typeof core.cur==='number'?core.cur:Number(core.cur||0);
+    const req=typeof core.req==='number'?core.req:Number(core.req||0)||1;
+    const p=Math.max(0,Math.min(100,(cur/req)*100));
+    const bar=coreCard.querySelector('.xp-bar-fill');
+    coreCard.querySelector('.core-level').textContent=core.level||'--';
+    coreCard.querySelector('.core-sub').textContent=`${cur}/${req} XP • ${p.toFixed(1)}% to next`;
+    if(bar){bar.style.width=`${p}%`;if(core.color)bar.style.background=core.color;}
+  }
+
+  statsList.forEach(s=>{
+    const cur=typeof s.cur==='number'?s.cur:Number(s.cur||0);
+    const reqRaw=typeof s.req==='number'?s.req:Number(s.req||0);
+    const req=reqRaw>0?reqRaw:1;
+    const p=Math.max(0,Math.min(100,(cur/req)*100));
+    const d=document.createElement('div');
+    d.className='card level-card';
+    const barColor=s.color||'var(--accent)';
+    d.innerHTML=`<div class='level-header'><span class='level-icon'>${s.icon||''}</span><span class='level-name'>${s.name||''}</span><span class='level-tag'>${s.level||''}</span></div><div class='xp-bar'><div class='xp-bar-fill' style="width:${p}%;background:${barColor};"></div></div><div class='small level-meta'>${cur}/${req} XP • ${p.toFixed(1)}% to next</div>`;
+    d.onclick=()=>updateLvlMeta(s,p);
+    lg.appendChild(d);
+  });
+
+  const best=statsList
+    .filter(s=>{const cur=typeof s.cur==='number'?s.cur:Number(s.cur||0);const req=typeof s.req==='number'?s.req:Number(s.req||0);return req>0&&cur<req;})
+    .sort((a,b)=>{const ac=typeof a.cur==='number'?a.cur:Number(a.cur||0);const ar=typeof a.req==='number'?a.req:Number(a.req||0);const bc=typeof b.cur==='number'?b.cur:Number(b.cur||0);const br=typeof b.req==='number'?b.req:Number(b.req||0);return (bc/br)-(ac/ar);})[0];
+  if(best){
+    const cur=typeof best.cur==='number'?best.cur:Number(best.cur||0);
+    const reqRaw=typeof best.req==='number'?best.req:Number(best.req||0);
+    const req=reqRaw>0?reqRaw:1;
+    const p=Math.max(0,Math.min(100,(cur/req)*100));
+    updateLvlMeta(best,p);
+  }
 
   document.getElementById('walletMeta').innerHTML=`Address: <code>${stats.wallet?.address||'-'}</code><br>SOL: ${stats.wallet?.sol??0} (${fmtUsd(stats.wallet?.solValueUsd)})`;
   const mt=document.getElementById('memeTable');
   const owned=stats.memecoins?.owned||[];
 
   function renderOwnedTable(rows){
-    mt.innerHTML = rows.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>mcap</th><th>chg (1h/24h)</th><th>value</th><th>market</th><th>link</th></tr></thead><tbody>${rows.map(x=>{
-      const price = (typeof x.livePriceUsd==='number') ? x.livePriceUsd : x.priceUsd;
-      const mcap = (typeof x.liveMarketCap==='number') ? x.liveMarketCap : x.marketCap;
-      const ch1 = (typeof x.livePriceChange1h==='number') ? x.livePriceChange1h : x.priceChange1h;
-      const ch24 = (typeof x.livePriceChange24h==='number') ? x.livePriceChange24h : x.priceChange24h;
-      const val = (typeof price==='number') ? (Number(x.amount||0) * price) : x.valueUsd;
+    const safeRows=Array.isArray(rows)?rows:[];
+    mt.innerHTML = safeRows.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>mcap</th><th>chg (1h/24h)</th><th>value</th><th>market</th><th>link</th></tr></thead><tbody>${safeRows.map(x=>{
+      const price = (typeof x.livePriceUsd==='number'&&Number.isFinite(x.livePriceUsd)) ? x.livePriceUsd : (typeof x.priceUsd==='number'&&Number.isFinite(x.priceUsd)?x.priceUsd:null);
+      const mcap = (typeof x.liveMarketCap==='number'&&Number.isFinite(x.liveMarketCap)) ? x.liveMarketCap : (typeof x.marketCap==='number'&&Number.isFinite(x.marketCap)?x.marketCap:null);
+      const ch1 = (typeof x.livePriceChange1h==='number'&&Number.isFinite(x.livePriceChange1h)) ? x.livePriceChange1h : (typeof x.priceChange1h==='number'&&Number.isFinite(x.priceChange1h)?x.priceChange1h:null);
+      const ch24 = (typeof x.livePriceChange24h==='number'&&Number.isFinite(x.livePriceChange24h)) ? x.livePriceChange24h : (typeof x.priceChange24h==='number'&&Number.isFinite(x.priceChange24h)?x.priceChange24h:null);
+      const baseAmount=Number(x.amount||0);
+      const val = (typeof price==='number'&&Number.isFinite(price)&&Number.isFinite(baseAmount)) ? baseAmount * price : (typeof x.valueUsd==='number'&&Number.isFinite(x.valueUsd)?x.valueUsd:null);
       const link = x.liveDexUrl || x.dexUrl;
       const sym = x.liveSymbol || x.symbol || 'MEME';
       const marketStatus = link ? 'priced' : 'unlisted';
       const fallbackLink = `https://solscan.io/token/${x.mint}`;
-      return `<tr><td><strong>${sym}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof price==='number')?'$'+price.toFixed(8):'n/a'}</td><td>${(typeof mcap==='number')?fmtUsd(mcap):'n/a'}</td><td>${(typeof ch1==='number'?(ch1>0?'+':'')+ch1.toFixed(2)+'%':'n/a')} / ${(typeof ch24==='number'?(ch24>0?'+':'')+ch24.toFixed(2)+'%':'n/a')}</td><td>${(typeof val==='number')?'$'+val.toFixed(4):'n/a'}</td><td>${marketStatus}</td><td>${link?`<a href='${link}' target='_blank' rel='noopener'>dex</a>`:`<a href='${fallbackLink}' target='_blank' rel='noopener'>solscan</a>`}</td></tr>`;
+      return `<tr><td><strong>${sym}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof price==='number'&&Number.isFinite(price))?'$'+price.toFixed(8):'n/a'}</td><td>${mcap!=null?fmtUsd(mcap):'n/a'}</td><td>${(typeof ch1==='number'&&Number.isFinite(ch1)?(ch1>0?'+':'')+ch1.toFixed(2)+'%':'n/a')} / ${(typeof ch24==='number'&&Number.isFinite(ch24)?(ch24>0?'+':'')+ch24.toFixed(2)+'%':'n/a')}</td><td>${(typeof val==='number'&&Number.isFinite(val))?'$'+val.toFixed(4):'n/a'}</td><td>${marketStatus}</td><td>${link?`<a href='${link}' target='_blank' rel='noopener'>dex</a>`:`<a href='${fallbackLink}' target='_blank' rel='noopener'>solscan</a>`}</td></tr>`;
     }).join('')}</tbody>` : `<tbody><tr><td class='small'>No owned memecoins yet.</td></tr></tbody>`;
   }
 
@@ -252,25 +337,33 @@ async function bootSequence(){
   let liveSolPrice=null;
 
   async function refreshLive(){
-    if(addr) liveWallet = await fetchLiveWallet(addr);
-    const liveRows = [];
-    for (const x of owned){
-      const dex = await fetchDexToken(x.mint);
-      liveRows.push({
-        ...x,
-        liveSymbol: dex?.symbol || null,
-        livePriceUsd: dex?.priceUsd ?? null,
-        liveMarketCap: dex?.marketCap ?? null,
-        livePriceChange1h: dex?.priceChange1h ?? null,
-        livePriceChange24h: dex?.priceChange24h ?? null,
-        liveDexUrl: dex?.dexUrl || null
-      });
+    try{
+      if(addr) liveWallet = await fetchLiveWallet(addr);
+      const liveRows = await Promise.all(
+        owned.map(async x=>{
+          const dex = await fetchDexToken(x.mint);
+          return {
+            ...x,
+            liveSymbol: dex?.symbol || null,
+            livePriceUsd: dex?.priceUsd ?? null,
+            liveMarketCap: dex?.marketCap ?? null,
+            livePriceChange1h: dex?.priceChange1h ?? null,
+            livePriceChange24h: dex?.priceChange24h ?? null,
+            liveDexUrl: dex?.dexUrl || null
+          };
+        })
+      );
+      const solDex = await fetchDexToken('So11111111111111111111111111111111111111112');
+      liveSolPrice = solDex?.priceUsd ?? null;
+      renderOwnedTable(liveRows);
+      renderLivePanels(liveWallet,stats,liveSolPrice);
+      document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json${liveWallet?.fetchedAt?' · live SOL @ '+liveWallet.fetchedAt:''}${liveSolPrice?' · live SOL price':''}`;
+    }catch(err){
+      console.warn('Live refresh failed',err);
+      renderOwnedTable(owned);
+      renderLivePanels(liveWallet,stats,liveSolPrice);
+      document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json · live refresh error, showing snapshot only`;
     }
-    const solDex = await fetchDexToken('So11111111111111111111111111111111111111112');
-    liveSolPrice = solDex?.priceUsd ?? null;
-    renderOwnedTable(liveRows);
-    renderLivePanels(liveWallet,stats,liveSolPrice);
-    document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json${liveWallet?.fetchedAt?' · live SOL @ '+liveWallet.fetchedAt:''}${liveSolPrice?' · live SOL price':''}`;
   }
 
   renderOwnedTable(owned);
