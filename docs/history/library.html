@@ -28,6 +28,11 @@
     .event:before{content:"";position:absolute;left:-24px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
     .warn{margin-top:12px;padding:10px;border:1px dashed #496093;border-radius:10px;background:#0f1a33;font-size:13px;color:#c8d5ff;display:none}
     .warn.active{display:block}
+    .reader{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:none}
+    .reader.active{display:block}
+    .reader h2{margin:0 0 8px}
+    .reader .md{white-space:pre-wrap;line-height:1.6;color:#dbe5ff}
+    .reader .top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
   </style>
 </head>
 <body>
@@ -66,6 +71,15 @@
     <div id="timelineView" class="view">
       <div id="timeline" class="timeline"></div>
     </div>
+
+    <section id="reader" class="reader">
+      <div class="top">
+        <h2 id="readerTitle">Document viewer</h2>
+        <button id="readerClose" class="btn">Close</button>
+      </div>
+      <div id="readerMeta" class="meta" style="margin-bottom:8px"></div>
+      <div id="readerBody" class="md">Select “Read here” on any card to preview it in-page.</div>
+    </section>
   </div>
 
 <script>
@@ -92,8 +106,37 @@ const claimsBtn = document.getElementById('claimsBtn');
 const gridView = document.getElementById('gridView');
 const timelineView = document.getElementById('timelineView');
 const claimsPanel = document.getElementById('claimsPanel');
+const reader = document.getElementById('reader');
+const readerTitle = document.getElementById('readerTitle');
+const readerMeta = document.getElementById('readerMeta');
+const readerBody = document.getElementById('readerBody');
+const readerClose = document.getElementById('readerClose');
+
+function prettyTitleFromFile(file){
+  const hit = docs.find(d=>d.file===file);
+  return hit ? hit.title : file;
+}
+
+async function openDoc(file){
+  try{
+    const res = await fetch(`./${file}`, {cache:'no-store'});
+    if(!res.ok) throw new Error('load-failed');
+    const text = await res.text();
+    reader.classList.add('active');
+    readerTitle.textContent = prettyTitleFromFile(file);
+    readerMeta.innerHTML = `<a href="./${file}" target="_blank" rel="noopener">Open raw markdown ↗</a>`;
+    readerBody.textContent = text;
+    reader.scrollIntoView({behavior:'smooth', block:'start'});
+  }catch{
+    reader.classList.add('active');
+    readerTitle.textContent = 'Failed to open document';
+    readerMeta.textContent = file;
+    readerBody.textContent = 'Could not load this markdown file from GitHub Pages.';
+  }
+}
 
 function filterDocs(){
+
   const query = q.value.trim().toLowerCase();
   const chosen = cat.value;
   return docs.filter(d=>{
@@ -109,9 +152,16 @@ function renderGrid(){
   cards.innerHTML = filtered.map(d=>`<article class="card">
     <div class="k">${d.cat}</div>
     <div class="title">${d.title}</div>
-    <div class="meta">${d.year ? `Era marker: ${d.year} • ` : ''}<a href="./${d.file}" target="_blank" rel="noopener">Open markdown ↗</a></div>
+    <div class="meta">${d.year ? `Era marker: ${d.year} • ` : ''}<a href="#" data-read="${d.file}">Read here</a> • <a href="./${d.file}" target="_blank" rel="noopener">Raw markdown ↗</a></div>
     <div>${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
   </article>`).join('') || `<div class="card">No matches found.</div>`;
+
+  cards.querySelectorAll('[data-read]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      e.preventDefault();
+      openDoc(a.getAttribute('data-read'));
+    });
+  });
 }
 
 function renderTimeline(){
@@ -119,8 +169,15 @@ function renderTimeline(){
   timeline.innerHTML = filtered.map(d=>`<div class="event">
     <div class="k">${d.cat}</div>
     <div class="title">${d.year}: ${d.title}</div>
-    <div class="meta"><a href="./${d.file}" target="_blank" rel="noopener">Open entry ↗</a></div>
+    <div class="meta"><a href="#" data-read-tl="${d.file}">Read here</a> • <a href="./${d.file}" target="_blank" rel="noopener">Raw ↗</a></div>
   </div>`).join('') || `<div class="event">No timeline matches.</div>`;
+
+  timeline.querySelectorAll('[data-read-tl]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      e.preventDefault();
+      openDoc(a.getAttribute('data-read-tl'));
+    });
+  });
 }
 
 function setView(mode){
@@ -139,6 +196,7 @@ claimsBtn.addEventListener('click', ()=>{
   claimsPanel.classList.toggle('active');
   claimsBtn.classList.toggle('active');
 });
+readerClose.addEventListener('click', ()=>reader.classList.remove('active'));
 
 renderGrid();
 renderTimeline();
