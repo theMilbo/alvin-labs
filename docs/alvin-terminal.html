@@ -229,7 +229,7 @@ async function bootSequence(){
   const owned=stats.memecoins?.owned||[];
 
   function renderOwnedTable(rows){
-    mt.innerHTML = rows.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>mcap</th><th>chg (1h/24h)</th><th>value</th><th>link</th></tr></thead><tbody>${rows.map(x=>{
+    mt.innerHTML = rows.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>mcap</th><th>chg (1h/24h)</th><th>value</th><th>market</th><th>link</th></tr></thead><tbody>${rows.map(x=>{
       const price = (typeof x.livePriceUsd==='number') ? x.livePriceUsd : x.priceUsd;
       const mcap = (typeof x.liveMarketCap==='number') ? x.liveMarketCap : x.marketCap;
       const ch1 = (typeof x.livePriceChange1h==='number') ? x.livePriceChange1h : x.priceChange1h;
@@ -237,7 +237,9 @@ async function bootSequence(){
       const val = (typeof price==='number') ? (Number(x.amount||0) * price) : x.valueUsd;
       const link = x.liveDexUrl || x.dexUrl;
       const sym = x.liveSymbol || x.symbol || 'MEME';
-      return `<tr><td><strong>${sym}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof price==='number')?'$'+price.toFixed(8):'n/a'}</td><td>${(typeof mcap==='number')?fmtUsd(mcap):'n/a'}</td><td>${(typeof ch1==='number'?(ch1>0?'+':'')+ch1.toFixed(2)+'%':'n/a')} / ${(typeof ch24==='number'?(ch24>0?'+':'')+ch24.toFixed(2)+'%':'n/a')}</td><td>${(typeof val==='number')?'$'+val.toFixed(4):'n/a'}</td><td>${link?`<a href='${link}' target='_blank' rel='noopener'>open</a>`:'-'}</td></tr>`;
+      const marketStatus = link ? 'priced' : 'unlisted';
+      const fallbackLink = `https://solscan.io/token/${x.mint}`;
+      return `<tr><td><strong>${sym}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof price==='number')?'$'+price.toFixed(8):'n/a'}</td><td>${(typeof mcap==='number')?fmtUsd(mcap):'n/a'}</td><td>${(typeof ch1==='number'?(ch1>0?'+':'')+ch1.toFixed(2)+'%':'n/a')} / ${(typeof ch24==='number'?(ch24>0?'+':'')+ch24.toFixed(2)+'%':'n/a')}</td><td>${(typeof val==='number')?'$'+val.toFixed(4):'n/a'}</td><td>${marketStatus}</td><td>${link?`<a href='${link}' target='_blank' rel='noopener'>dex</a>`:`<a href='${fallbackLink}' target='_blank' rel='noopener'>solscan</a>`}</td></tr>`;
     }).join('')}</tbody>` : `<tbody><tr><td class='small'>No owned memecoins yet.</td></tr></tbody>`;
   }
 
