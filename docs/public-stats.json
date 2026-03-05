@@ -1,22 +1,64 @@
 {
-  "generatedAt": "2026-03-05T09:04:23.982425+00:00",
+  "generatedAt": "2026-03-05T11:04:22.978188+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772700364,
+    "lastCheck": 1772707564,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.013035495,
-    "solPriceUsd": 90.97,
-    "solValueUsd": 1.18583898015,
+    "solPriceUsd": 92.41,
+    "solValueUsd": 1.2046100929499999,
     "tokenCount": 5
   },
   "memecoins": {
     "browsed": [
+      {
+        "token": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "symbol": "PUMP",
+        "at": "2026-03-05T10:59:32.274Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+        "symbol": "Bonk",
+        "at": "2026-03-05T10:36:33.774Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "PE85tFDe19MhGLE7FrJEEEiFWPFsD2Zr16dGkhWgmQh",
+        "symbol": "PEPE",
+        "at": "2026-03-05T09:23:59.356Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "EkJuyYyD3to61CHVPJn6wHb7xANxvqApnVJ4o2SdBAGS",
+        "symbol": "PEPE",
+        "at": "2026-03-05T09:23:59.356Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "2Zaq3WyDJj2ZkMcuqUiTBfAXCjqZtqihxcwUdwv9dyHA",
+        "symbol": "PEPE",
+        "at": "2026-03-05T09:23:59.356Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "F9CpWoyeBJfoRB8f2pBe2ZNPbPsEE76mWZWme3StsvHK",
+        "symbol": "PEPE",
+        "at": "2026-03-05T09:23:59.356Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "B5WTLaRwaUQpKk7ir1wniNB6m5o8GgMrimhKMYan2R6B",
+        "symbol": "Pepe",
+        "at": "2026-03-05T09:23:59.355Z",
+        "source": "pump_scan"
+      },
       {
         "token": "FLJYGHpCCcfYUdzhcfHSeSd2peb5SMajNWaCsRnhpump",
         "symbol": "STORE",
@@ -92,44 +134,6 @@
         "token": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
         "at": "2026-03-04T23:36:19.021Z",
         "source": "dex_token"
-      },
-      {
-        "token": "SNS8DJbHc34nKySHVhLGMUUE72ho6igvJaxtq9T3cX3",
-        "at": "2026-03-04T23:33:44.757Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "5LS3ips7jWxfuVHzoMzKzp3cCwjH9zmrtYXmYBVGpump",
-        "at": "2026-03-04T23:33:43.992Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "5HV956n7UQT1XdJzv43fHPocest5YAmi9ipsuiJx7zt7",
-        "at": "2026-03-04T23:33:43.764Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "4daoTLufDmV3ods48Zh8rymaZKBLtgEvuH9qALYLbonk",
-        "at": "2026-03-04T23:33:43.523Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "Hxby3Fq5THrQ35teyJcHhTFAGVLaQynzrMB46yjwpump",
-        "symbol": "MMDD",
-        "at": "2026-03-04T23:33:34.235Z",
-        "source": "pump_scan"
-      },
-      {
-        "token": "78spCGHTWwGVfYq2rntoVzyvEQc6r8HMYD2farX8pump",
-        "symbol": "memecycle",
-        "at": "2026-03-04T23:33:34.234Z",
-        "source": "pump_scan"
-      },
-      {
-        "token": "Ho5nr7Muzuw2jQw693dBVqj2g8JBJhQLZ717xniGpump",
-        "symbol": "MMFA",
-        "at": "2026-03-04T22:34:36.604Z",
-        "source": "pump_scan"
       }
     ],
     "owned": [
@@ -138,8 +142,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.006418,
-        "valueUsd": 1.96079234981,
+        "priceUsd": 0.005881,
+        "valueUsd": 1.796731039145,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -147,8 +151,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05076,
-        "valueUsd": 0.5482566586375199,
+        "priceUsd": 0.05271,
+        "valueUsd": 0.56931852791142,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
