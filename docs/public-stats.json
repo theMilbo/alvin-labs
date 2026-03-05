@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-04T23:04:24.916856+00:00",
+  "generatedAt": "2026-03-05T01:04:24.098793+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
@@ -10,35 +10,114 @@
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
-    "sol": 0.037079775,
-    "solPriceUsd": 91.26,
-    "solValueUsd": 3.3839002665000004,
-    "tokenCount": 4
+    "sol": 0.013035495,
+    "solPriceUsd": 90.64,
+    "solValueUsd": 1.1815372668,
+    "tokenCount": 5
   },
   "memecoins": {
     "browsed": [
       {
-        "token": "BoRiiSZ4hqtbCnQc7cWaEYTEtxmzRXyy5xaKCt7Ppump",
-        "symbol": "UNTAXED",
-        "at": "2026-03-04T22:34:36.605Z",
+        "token": "J3mTHLJ3GMcz9ycfvUji5HzeuTvmUQjQSdzChsS5pump",
+        "symbol": "SOLBISCUIT",
+        "at": "2026-03-05T00:59:32.757Z",
         "source": "pump_scan"
       },
       {
-        "token": "5HV956n7UQT1XdJzv43fHPocest5YAmi9ipsuiJx7zt7",
-        "symbol": "memecoin",
-        "at": "2026-03-04T22:34:36.605Z",
+        "token": "H4phNbsqjV5rqk8u6FUACTLB6rNZRTAPGnBb8KXJpump",
+        "symbol": "SSE",
+        "at": "2026-03-05T00:59:32.757Z",
         "source": "pump_scan"
+      },
+      {
+        "token": "DRLNhjM7jusYFPF1qade1dBD1qhgds7oAfdKs51Vpump",
+        "symbol": "SOL",
+        "at": "2026-03-05T00:59:32.757Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "BoRiiSZ4hqtbCnQc7cWaEYTEtxmzRXyy5xaKCt7Ppump",
+        "symbol": "UNTAXED",
+        "at": "2026-03-05T00:59:32.757Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "8Gt5TFTDnSnteB9iT82nGNn2wsueaxPEaEAdCvwZpump",
+        "symbol": "GSOL",
+        "at": "2026-03-05T00:59:32.755Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "9m6UayMGod2BKKhXujLLWQQsaNaDCGWQB61QvxMRbonk",
+        "symbol": "SOLCHAN",
+        "at": "2026-03-05T00:04:49.674Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "5v4CNUhnAq4kdCRkje3vP9VN9eq7s8tQakjP2bmobonk",
+        "symbol": "SEX",
+        "at": "2026-03-05T00:04:49.674Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "veHk67GGXBc283T9zUZqJEpGbVCtuJNo95ExMesbonk",
+        "symbol": "SOLANA-CHA",
+        "at": "2026-03-05T00:04:49.674Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "BqVHWpwUDgMik5gbTciFfozadpE2oZth5bxCDrgbDt52",
+        "symbol": "OPOS",
+        "at": "2026-03-05T00:04:49.674Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "2EyNf2PCNT7eQ9ag1RDXw3qn3Cy22WdTA9T6HKDebonk",
+        "symbol": "SSX",
+        "at": "2026-03-05T00:04:49.673Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+        "at": "2026-03-04T23:36:19.021Z",
+        "source": "dex_token"
+      },
+      {
+        "token": "SNS8DJbHc34nKySHVhLGMUUE72ho6igvJaxtq9T3cX3",
+        "at": "2026-03-04T23:33:44.757Z",
+        "source": "dex_token"
       },
       {
         "token": "5LS3ips7jWxfuVHzoMzKzp3cCwjH9zmrtYXmYBVGpump",
-        "symbol": "Oil",
-        "at": "2026-03-04T22:34:36.605Z",
-        "source": "pump_scan"
+        "at": "2026-03-04T23:33:43.992Z",
+        "source": "dex_token"
+      },
+      {
+        "token": "5HV956n7UQT1XdJzv43fHPocest5YAmi9ipsuiJx7zt7",
+        "at": "2026-03-04T23:33:43.764Z",
+        "source": "dex_token"
       },
       {
         "token": "4daoTLufDmV3ods48Zh8rymaZKBLtgEvuH9qALYLbonk",
-        "symbol": "memecoin",
-        "at": "2026-03-04T22:34:36.605Z",
+        "at": "2026-03-04T23:33:43.523Z",
+        "source": "dex_token"
+      },
+      {
+        "token": "Hxby3Fq5THrQ35teyJcHhTFAGVLaQynzrMB46yjwpump",
+        "symbol": "MMDD",
+        "at": "2026-03-04T23:33:34.235Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "78spCGHTWwGVfYq2rntoVzyvEQc6r8HMYD2farX8pump",
+        "symbol": "memecycle",
+        "at": "2026-03-04T23:33:34.234Z",
+        "source": "pump_scan"
+      },
+      {
+        "token": "FLJYGHpCCcfYUdzhcfHSeSd2peb5SMajNWaCsRnhpump",
+        "symbol": "STORE",
+        "at": "2026-03-04T23:33:27.702Z",
         "source": "pump_scan"
       },
       {
@@ -51,79 +130,6 @@
         "token": "61876930468349272478588823528448567520448135824570000000000000000000000000000",
         "at": "2026-03-04T20:33:58.406Z",
         "source": "dex_token"
-      },
-      {
-        "token": "27G8Mt9snBvAtDwuxS3Y9729Y3yXwUpA7u5tS9W6pump",
-        "at": "2026-03-04T20:33:57.976Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "7GCihp7BbeLEoX6N2fUR89hJe8R1XWpxT52n4QpUpump",
-        "at": "2026-03-04T20:33:57.454Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "DezXAZ8z7Pnrn9t9S3L4C7D55qM2YpDdf72f7K2X7W8F",
-        "at": "2026-03-04T20:33:56.964Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "EKpQGSJtjjt2GfS868q76yof46A8w7WH6Yw4WfPqA2T",
-        "at": "2026-03-04T20:33:56.521Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "TRUMP",
-        "at": "2026-03-04T20:33:51.979Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "Pnut",
-        "at": "2026-03-04T20:33:51.476Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "POPCAT",
-        "at": "2026-03-04T20:33:50.969Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "BONK",
-        "at": "2026-03-04T20:33:50.449Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "WIF",
-        "at": "2026-03-04T20:33:50.018Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "DezXAZrz7Pnr2195Qme7yRe5TJCcQffs4Ybr7boDUWJv",
-        "at": "2026-03-04T18:34:21.853Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "FchPZCTbCA8cSeaRiWq77euMTMfMgJF2nzoabKC7pump",
-        "at": "2026-03-04T18:34:17.445Z",
-        "source": "dex_token"
-      },
-      {
-        "token": "J3mTHLJ3GMcz9ycfvUji5HzeuTvmUQjQSdzChsS5pump",
-        "symbol": "SOLBISCUIT",
-        "at": "2026-03-04T18:34:08.634Z",
-        "source": "pump_scan"
-      },
-      {
-        "token": "DRLNhjM7jusYFPF1qade1dBD1qhgds7oAfdKs51Vpump",
-        "symbol": "SOL",
-        "at": "2026-03-04T18:34:08.634Z",
-        "source": "pump_scan"
-      },
-      {
-        "token": "BELjeL4EhPUa8doduMSZz8RCPGRGR98kLcruDb2jpump",
-        "symbol": "SOLSIM",
-        "at": "2026-03-04T18:34:08.634Z",
-        "source": "pump_scan"
       }
     ],
     "owned": [
@@ -132,8 +138,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.005762,
-        "valueUsd": 1.76037480829,
+        "priceUsd": 0.007467,
+        "valueUsd": 2.281277107515,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -141,8 +147,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05153,
-        "valueUsd": 0.55657339676106,
+        "priceUsd": 0.05112,
+        "valueUsd": 0.55214500373424,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
@@ -153,6 +159,15 @@
         "priceUsd": null,
         "valueUsd": null,
         "dexUrl": null
+      },
+      {
+        "mint": "SNS8DJbHc34nKySHVhLGMUUE72ho6igvJaxtq9T3cX3",
+        "amount": 1470.92505,
+        "decimals": 5,
+        "symbol": null,
+        "priceUsd": 0.001357,
+        "valueUsd": 1.9960452928499999,
+        "dexUrl": "https://dexscreener.com/solana/gwumu1kp2cxwhljtfbecbfvtauhemutbpn1zjqjr82gc"
       },
       {
         "mint": "1392NbcdfNhTQrdgbNnYfPn5rqZcHN6DMxD6bxJwpump",
