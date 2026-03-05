@@ -384,6 +384,36 @@ async function bootSequence(){
   const mt=document.getElementById('memeTable');
   let owned=[];
 
+  async function fetchMemeDiscoverLive(limit=12){
+    try{
+      const r=await fetch('https://api.dexscreener.com/token-boosts/latest/v1',{cache:'no-store'});
+      if(!r.ok) return [];
+      const arr=await r.json();
+      const cands=(Array.isArray(arr)?arr:[]).filter(t=>t.chainId==='solana').slice(0,30);
+      const out=[];
+      for(const t of cands){
+        const mint=t.tokenAddress||t.address;
+        if(!mint) continue;
+        const dex=await fetchDexToken(mint);
+        if(!dex || !Number.isFinite(dex.priceUsd)) continue;
+        out.push({
+          mint,
+          symbol:dex.symbol||'MEME',
+          amount:'-',
+          liveSymbol:dex.symbol||'MEME',
+          livePriceUsd:dex.priceUsd,
+          liveMarketCap:dex.marketCap,
+          livePriceChange1h:dex.priceChange1h,
+          livePriceChange24h:dex.priceChange24h,
+          liveDexUrl:dex.dexUrl,
+          discovered:true
+        });
+        if(out.length>=limit) break;
+      }
+      return out;
+    }catch{return [];}
+  }
+
   function renderOwnedTable(rows){
     const safeRows=Array.isArray(rows)?rows:[];
     mt.innerHTML = safeRows.length ? `<thead><tr><th>token</th><th>amount</th><th>price</th><th>mcap</th><th>chg (1h/24h)</th><th>value</th><th>market</th><th>link</th></tr></thead><tbody>${safeRows.map(x=>{
@@ -395,7 +425,7 @@ async function bootSequence(){
       const val = (typeof price==='number'&&Number.isFinite(price)&&Number.isFinite(baseAmount)) ? baseAmount * price : (typeof x.valueUsd==='number'&&Number.isFinite(x.valueUsd)?x.valueUsd:null);
       const link = x.liveDexUrl || x.dexUrl;
       const sym = x.liveSymbol || x.symbol || 'MEME';
-      const marketStatus = link ? 'priced' : 'unlisted';
+      const marketStatus = x.discovered ? 'discovered' : (link ? 'priced' : 'unlisted');
       const fallbackLink = `https://solscan.io/token/${x.mint}`;
       return `<tr><td><strong>${sym}</strong><br><span class='small'><code>${x.mint}</code></span></td><td>${x.amount}</td><td>${(typeof price==='number'&&Number.isFinite(price))?'$'+price.toFixed(8):'n/a'}</td><td>${mcap!=null?fmtUsd(mcap):'n/a'}</td><td>${(typeof ch1==='number'&&Number.isFinite(ch1)?(ch1>0?'+':'')+ch1.toFixed(2)+'%':'n/a')} / ${(typeof ch24==='number'&&Number.isFinite(ch24)?(ch24>0?'+':'')+ch24.toFixed(2)+'%':'n/a')}</td><td>${(typeof val==='number'&&Number.isFinite(val))?'$'+val.toFixed(4):'n/a'}</td><td>${marketStatus}</td><td>${link?`<a href='${link}' target='_blank' rel='noopener'>dex</a>`:`<a href='${fallbackLink}' target='_blank' rel='noopener'>solscan</a>`}</td></tr>`;
     }).join('')}</tbody>` : `<tbody><tr><td class='small'>No owned memecoins yet.</td></tr></tbody>`;
@@ -414,7 +444,7 @@ async function bootSequence(){
       if(addr) liveWallet = await fetchLiveWallet(addr);
       if(!liveWallet) liveWallet = await fetchWalletSnapshot();
       owned = (liveWallet?.tokens || []).map(t => ({ mint:t.mint, amount:t.amount }));
-      const liveRows = await Promise.all(
+      let liveRows = await Promise.all(
         owned.map(async x=>{
           const dex = await fetchDexToken(x.mint);
           return {
@@ -429,6 +459,9 @@ async function bootSequence(){
           };
         })
       );
+      if(!liveRows.length){
+        liveRows = await fetchMemeDiscoverLive(12);
+      }
       const solDex = await fetchDexToken('So11111111111111111111111111111111111111112');
       liveSolPrice = solDex?.priceUsd ?? null;
       renderOwnedTable(liveRows);
@@ -446,6 +479,9 @@ async function bootSequence(){
       setOv('wallet sol', Number(liveWallet?.sol || 0).toFixed(6));
       setOv('wallet usd', fmtUsd((liveWallet?.sol || 0) * (liveSolPrice || 0)));
       setOv('tracked tokens', liveRows.length);
+      if(!owned.length && liveRows.length){
+        document.getElementById('walletMeta').innerHTML=`Address: <code>${donateAddr}</code><br>No owned meme tokens found — showing live discovered set.`;
+      }
 
       const sourceLabel = liveWallet?.source==='snapshot' ? 'wallet snapshot + DexScreener API' : 'wallet RPC + DexScreener API';
       document.getElementById('stamp').textContent=`updated: ${new Date().toISOString()} | source: ${sourceLabel}${liveWallet?.fetchedAt?' · wallet @ '+liveWallet.fetchedAt:''}`;
