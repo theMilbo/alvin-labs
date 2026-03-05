@@ -244,8 +244,17 @@ async function fetchLiveWallet(address){
       if(!mint||!Number.isFinite(a)||a<=0)return null;
       return {mint,amount:a,decimals:d};
     }).filter(Boolean);
-    return {sol,tokens,fetchedAt:new Date().toISOString().slice(0,19)+'Z'};
+    return {sol,tokens,fetchedAt:new Date().toISOString().slice(0,19)+'Z',source:'rpc'};
   }catch(e){console.warn('Live wallet fetch failed',e);return null;}
+}
+async function fetchWalletSnapshot(){
+  try{
+    const r=await fetch('./wallet-live.json',{cache:'no-store'});
+    if(!r.ok) return null;
+    const j=await r.json();
+    if(!j||!Array.isArray(j.tokens)) return null;
+    return {sol:Number(j.sol||0),tokens:j.tokens,fetchedAt:j.fetchedAt||null,source:'snapshot'};
+  }catch{return null;}
 }
 function renderLivePanels(live,solPriceUsd){
   const grid=document.getElementById('liveSolGrid');
@@ -403,6 +412,7 @@ async function bootSequence(){
   async function refreshLive(){
     try{
       if(addr) liveWallet = await fetchLiveWallet(addr);
+      if(!liveWallet) liveWallet = await fetchWalletSnapshot();
       owned = (liveWallet?.tokens || []).map(t => ({ mint:t.mint, amount:t.amount }));
       const liveRows = await Promise.all(
         owned.map(async x=>{
@@ -437,7 +447,8 @@ async function bootSequence(){
       setOv('wallet usd', fmtUsd((liveWallet?.sol || 0) * (liveSolPrice || 0)));
       setOv('tracked tokens', liveRows.length);
 
-      document.getElementById('stamp').textContent=`updated: ${new Date().toISOString()} | source: wallet RPC + DexScreener API${liveWallet?.fetchedAt?' · live wallet @ '+liveWallet.fetchedAt:''}`;
+      const sourceLabel = liveWallet?.source==='snapshot' ? 'wallet snapshot + DexScreener API' : 'wallet RPC + DexScreener API';
+      document.getElementById('stamp').textContent=`updated: ${new Date().toISOString()} | source: ${sourceLabel}${liveWallet?.fetchedAt?' · wallet @ '+liveWallet.fetchedAt:''}`;
     }catch(err){
       console.warn('Live refresh failed',err);
       renderOwnedTable(owned);
