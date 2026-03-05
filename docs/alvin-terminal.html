@@ -172,6 +172,7 @@
 
 <script>
 const SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
+const DEFAULT_WALLET = 'AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm';
 async function j(p){const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(p);return r.json();}
 async function solanaRpc(body){const r=await fetch(SOLANA_RPC,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('RPC HTTP');const j=await r.json();if(j.error)throw new Error(j.error.message||'RPC');return j.result;}
 function tabs(){
@@ -218,21 +219,29 @@ async function fetchLiveWallet(address){
       solanaRpc({jsonrpc:'2.0',id:2,method:'getTokenAccountsByOwner',params:[address,{programId:'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'},{encoding:'jsonParsed'}]})
     ]);
     const sol=bal.value/1e9;
-    const tokens=(accs.value||[]).map(t=>{const info=t.account?.data?.parsed?.info;if(!info)return null;const a=info.tokenAmount?.uiAmount??0;const d=info.tokenAmount?.decimals??0;return {mint:info.mint?.slice(0,8)+'…',amount:a,decimals:d};}).filter(Boolean);
+    const tokens=(accs.value||[]).map(t=>{
+      const info=t.account?.data?.parsed?.info;
+      if(!info)return null;
+      const a=Number(info.tokenAmount?.uiAmount??0);
+      const d=Number(info.tokenAmount?.decimals??0);
+      const mint=info.mint;
+      if(!mint||!Number.isFinite(a)||a<=0)return null;
+      return {mint,amount:a,decimals:d};
+    }).filter(Boolean);
     return {sol,tokens,fetchedAt:new Date().toISOString().slice(0,19)+'Z'};
   }catch(e){console.warn('Live wallet fetch failed',e);return null;}
 }
-function renderLivePanels(live,stats,solPriceUsd){
+function renderLivePanels(live,solPriceUsd){
   const grid=document.getElementById('liveSolGrid');
   grid.innerHTML='';
-  const sol=live&&typeof live.sol==='number'?live.sol:(Number(stats?.wallet?.sol)||0);
-  const price=(typeof solPriceUsd==='number'&&solPriceUsd>0)?solPriceUsd:Number(stats?.wallet?.solPriceUsd||0);
-  const solUsd = price>0 ? sol*price : Number(stats?.wallet?.solValueUsd||0);
+  const sol=live&&typeof live.sol==='number'?live.sol:0;
+  const price=(typeof solPriceUsd==='number'&&solPriceUsd>0)?solPriceUsd:0;
+  const solUsd = price>0 ? sol*price : 0;
   const card=(k,v,isLive)=>{const d=document.createElement('div');d.className=isLive?'card live-panel':'card';d.innerHTML=`<div class='k'>${k}</div><div class='v'>${v}</div>`;return d;};
   grid.appendChild(card(live?'SOL (live)':'SOL',sol.toFixed(6),!!live));
   grid.appendChild(card('SOL price',price?`$${price.toFixed(2)}`:'n/a',!!solPriceUsd));
   grid.appendChild(card('SOL ≈ USD',fmtUsd(solUsd),!!solPriceUsd));
-  const tokenCount=live&&Array.isArray(live.tokens)?live.tokens.length:(stats?.wallet?.tokenCount??0);
+  const tokenCount=live&&Array.isArray(live.tokens)?live.tokens.length:0;
   grid.appendChild(card('Token accounts',String(tokenCount),!!(live&&live.tokens)));
   if(live&&Array.isArray(live.tokens)&&live.tokens.length>0){
     const list=live.tokens.slice(0,5).map(t=>`${t.mint}: ${t.amount}`).join(' | ');
@@ -262,8 +271,12 @@ async function bootSequence(){
 
 (async()=>{
   tabs();
-  const [levels,stats]=await Promise.all([j('./levels.json'),j('./public-stats.json')]);
-  const donateAddr = stats.wallet?.address || '-';
+  const levels=await j('./levels.json');
+  const stats=await j('./public-stats.json').catch(()=>({}));
+  const urlWallet = new URLSearchParams(location.search).get('wallet');
+  const savedWallet = localStorage.getItem('alvin_wallet_addr');
+  const donateAddr = urlWallet || savedWallet || DEFAULT_WALLET;
+  localStorage.setItem('alvin_wallet_addr', donateAddr);
   const donateAddrEl = document.getElementById('donateAddr');
   const openSolscanDonate = document.getElementById('openSolscanDonate');
   const copyDonateBtn = document.getElementById('copyDonateBtn');
@@ -282,11 +295,11 @@ async function bootSequence(){
   }
   const ov=[
     ['rank',`${levels.rank?.label||'-'} (${levels.rank?.level||'-'})`],
-    ['wallet sol',String(stats.wallet?.sol ?? 0)],
-    ['wallet usd',fmtUsd(stats.wallet?.solValueUsd)],
-    ['meme owned',String((stats.memecoins?.owned||[]).length)],
+    ['wallet',`${donateAddr.slice(0,6)}...${donateAddr.slice(-6)}`],
+    ['wallet sol','loading...'],
+    ['wallet usd','loading...'],
+    ['tracked tokens','loading...'],
     ['meme browsed',String((stats.memecoins?.browsed||[]).length)],
-    ['freelancer bids',String(stats.freelancer?.totalBids ?? 0)],
     ['reddit upvotes',String(stats.reddit?.upvoteCount ?? 0)],
     ['birth date',stats.alvin?.dateOfBirthEu || '-']
   ];
@@ -342,9 +355,9 @@ async function bootSequence(){
     updateLvlMeta(best,p);
   }
 
-  document.getElementById('walletMeta').innerHTML=`Address: <code>${stats.wallet?.address||'-'}</code><br>SOL: ${stats.wallet?.sol??0} (${fmtUsd(stats.wallet?.solValueUsd)})`;
+  document.getElementById('walletMeta').innerHTML=`Address: <code>${donateAddr}</code><br>Live wallet mode: enabled`;
   const mt=document.getElementById('memeTable');
-  const owned=stats.memecoins?.owned||[];
+  let owned=[];
 
   function renderOwnedTable(rows){
     const safeRows=Array.isArray(rows)?rows:[];
@@ -367,18 +380,20 @@ async function bootSequence(){
   document.getElementById('molt').innerHTML=`Last check: ${stats.moltbook?.lastCheck||'-'}<br>${mh}`;
   document.getElementById('reddit').innerHTML=`Last run: ${stats.reddit?.lastRun||'-'}<br>Upvotes: ${stats.reddit?.upvoteCount||0} • Comments: ${stats.reddit?.commentCount||0}`;
 
-  const addr=stats.wallet?.address;
+  const addr=donateAddr;
   let liveWallet=null;
   let liveSolPrice=null;
 
   async function refreshLive(){
     try{
       if(addr) liveWallet = await fetchLiveWallet(addr);
+      owned = (liveWallet?.tokens || []).map(t => ({ mint:t.mint, amount:t.amount }));
       const liveRows = await Promise.all(
         owned.map(async x=>{
           const dex = await fetchDexToken(x.mint);
           return {
             ...x,
+            symbol: dex?.symbol || null,
             liveSymbol: dex?.symbol || null,
             livePriceUsd: dex?.priceUsd ?? null,
             liveMarketCap: dex?.marketCap ?? null,
@@ -391,13 +406,27 @@ async function bootSequence(){
       const solDex = await fetchDexToken('So11111111111111111111111111111111111111112');
       liveSolPrice = solDex?.priceUsd ?? null;
       renderOwnedTable(liveRows);
-      renderLivePanels(liveWallet,stats,liveSolPrice);
-      document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json${liveWallet?.fetchedAt?' · live SOL @ '+liveWallet.fetchedAt:''}${liveSolPrice?' · live SOL price':''}`;
+      renderLivePanels(liveWallet,liveSolPrice);
+
+      const ovCards = Array.from(document.querySelectorAll('#ovGrid .card .k')).map((kEl)=>kEl.textContent?.toLowerCase());
+      const setOv = (key,val)=>{
+        const idx = ovCards.findIndex(k=>k===key);
+        if(idx>=0){
+          const card = document.querySelectorAll('#ovGrid .card')[idx];
+          const v = card?.querySelector('.v');
+          if(v) v.textContent = String(val);
+        }
+      };
+      setOv('wallet sol', Number(liveWallet?.sol || 0).toFixed(6));
+      setOv('wallet usd', fmtUsd((liveWallet?.sol || 0) * (liveSolPrice || 0)));
+      setOv('tracked tokens', liveRows.length);
+
+      document.getElementById('stamp').textContent=`updated: ${new Date().toISOString()} | source: wallet RPC + DexScreener API${liveWallet?.fetchedAt?' · live wallet @ '+liveWallet.fetchedAt:''}`;
     }catch(err){
       console.warn('Live refresh failed',err);
       renderOwnedTable(owned);
-      renderLivePanels(liveWallet,stats,liveSolPrice);
-      document.getElementById('stamp').textContent=`updated: ${stats.generatedAt||'unknown'} | source: public-stats.json + levels.json · live refresh error, showing snapshot only`;
+      renderLivePanels(liveWallet,liveSolPrice);
+      document.getElementById('stamp').textContent=`updated: ${new Date().toISOString()} | source: wallet RPC + DexScreener API · live refresh error`;
     }
   }
 
