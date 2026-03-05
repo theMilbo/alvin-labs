@@ -171,10 +171,26 @@
 </div>
 
 <script>
-const SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
+const SOLANA_RPCS = [
+  'https://api.mainnet-beta.solana.com',
+  'https://solana-rpc.publicnode.com',
+  'https://rpc.ankr.com/solana'
+];
 const DEFAULT_WALLET = 'AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm';
 async function j(p){const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(p);return r.json();}
-async function solanaRpc(body){const r=await fetch(SOLANA_RPC,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('RPC HTTP');const j=await r.json();if(j.error)throw new Error(j.error.message||'RPC');return j.result;}
+async function solanaRpc(body){
+  let lastErr = null;
+  for (const rpc of SOLANA_RPCS){
+    try{
+      const r=await fetch(rpc,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      if(!r.ok){ lastErr = new Error(`RPC HTTP ${r.status} @ ${rpc}`); continue; }
+      const j=await r.json();
+      if(j.error){ lastErr = new Error(`${j.error.message||'RPC'} @ ${rpc}`); continue; }
+      return j.result;
+    }catch(e){ lastErr = e; }
+  }
+  throw lastErr || new Error('All RPC endpoints failed');
+}
 function tabs(){
   const btns=Array.from(document.querySelectorAll('.tab'));
   const go=(idx)=>{const i=((idx%btns.length)+btns.length)%btns.length;btns[i].click();btns[i].focus();};
