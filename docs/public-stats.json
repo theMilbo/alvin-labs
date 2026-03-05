@@ -1,22 +1,27 @@
 {
-  "generatedAt": "2026-03-05T03:04:25.185967+00:00",
+  "generatedAt": "2026-03-05T05:04:25.635982+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772678761,
+    "lastCheck": 1772685963,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.013035495,
-    "solPriceUsd": 90.34,
-    "solValueUsd": 1.1776266183,
+    "solPriceUsd": 90.52,
+    "solValueUsd": 1.1799730073999999,
     "tokenCount": 5
   },
   "memecoins": {
     "browsed": [
+      {
+        "token": "Aj21QKXezLit9kdJzPXfRrozhuKSgoLaDJBY6zbspump",
+        "at": "2026-03-05T04:59:43.798Z",
+        "source": "dex_token"
+      },
       {
         "token": "J3mTHLJ3GMcz9ycfvUji5HzeuTvmUQjQSdzChsS5pump",
         "symbol": "SOLBISCUIT",
@@ -125,11 +130,6 @@
         "symbol": "MMFA",
         "at": "2026-03-04T22:34:36.604Z",
         "source": "pump_scan"
-      },
-      {
-        "token": "61876930468349272478588823528448567520448135824570000000000000000000000000000",
-        "at": "2026-03-04T20:33:58.406Z",
-        "source": "dex_token"
       }
     ],
     "owned": [
@@ -138,8 +138,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.006119,
-        "valueUsd": 1.869443500855,
+        "priceUsd": 0.006248,
+        "valueUsd": 1.90885487716,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -147,8 +147,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.0506,
-        "valueUsd": 0.5465285052612,
+        "priceUsd": 0.05094,
+        "valueUsd": 0.5502008311858799,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
