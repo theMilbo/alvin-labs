@@ -197,7 +197,7 @@ function tabs(){
   btns.forEach((b)=>b.onclick=()=>{btns.forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));const panel=document.getElementById(b.dataset.tab);if(panel)panel.classList.add('active');if(b.dataset.tab==='al-game')setTimeout(()=>document.getElementById('gameInp')?.focus(),80);});
   document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();const i=btns.findIndex(x=>x.classList.contains('active'));go(i+1);}else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();const i=btns.findIndex(x=>x.classList.contains('active'));go(i-1);}});
 }
-function fmtUsd(v){const n=typeof v==='number'?v:(v!=null?Number(v):NaN);return Number.isFinite(n)?`$${n.toFixed(2)}`:'n/a'}
+function fmtUsd(v){const n=typeof v==='number'?v:(v!=null?Number(v):NaN);if(!Number.isFinite(n))return 'n/a';const x=Math.abs(n);if(x>=1e9)return `$${(n/1e9).toFixed(2)}B`;if(x>=1e6)return `$${(n/1e6).toFixed(2)}M`;if(x>=1e3)return `$${(n/1e3).toFixed(1)}K`;return `$${n.toFixed(4)}`;}
 function pickBestPair(pairs){
   if(!Array.isArray(pairs)||!pairs.length) return null;
   return pairs.slice().sort((a,b)=>(b?.liquidity?.usd||0)-(a?.liquidity?.usd||0))[0];
