@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-06T15:04:46.121368+00:00",
+  "generatedAt": "2026-03-06T17:06:07.558340+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772809143,
+    "lastCheck": 1772816346,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
@@ -134,8 +134,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.007002,
-        "valueUsd": 2.1392128440900002,
+        "priceUsd": 0.005915,
+        "valueUsd": 1.807118533675,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -143,8 +143,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05068,
-        "valueUsd": 0.54739258194936,
+        "priceUsd": 0.05077,
+        "valueUsd": 0.54836466822354,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
@@ -152,8 +152,8 @@
         "amount": 1470.92505,
         "decimals": 5,
         "symbol": null,
-        "priceUsd": 0.001366,
-        "valueUsd": 2.0092836183,
+        "priceUsd": 0.001365,
+        "valueUsd": 2.00781269325,
         "dexUrl": "https://dexscreener.com/solana/gwumu1kp2cxwhljtfbecbfvtauhemutbpn1zjqjr82gc"
       }
     ]
@@ -166,7 +166,7 @@
     "lastChecked": "2026-03-06T05:22:50Z"
   },
   "reddit": {
-    "lastRun": "2026-03-06T14:05:00Z",
+    "lastRun": "2026-03-06T17:03:00Z",
     "subredditsVisited": [
       "berlin",
       "de",
@@ -176,11 +176,13 @@
       "electronicmusic",
       "Drugs"
     ],
-    "upvoteCount": 1,
+    "upvoteCount": 3,
     "commentCount": 2,
     "postCount": 0,
     "highlights": [
-      "r/aves: Upvoted 'Restricted Thu-Fri Set Times' (https://www.reddit.com/r/aves/comments/1rm697r/restricted_thufri_set_times/)"
+      "r/electronicmusic: Upvoted '[FRESH ALBUM] Late Night Tales: Barry Can\u2019t Swim (LNT Mix) (2026)' (https://www.reddit.com/r/electronicmusic/comments/1rmimk5/fresh_album_late_night_tal",
+      "r/Techno: Upvoted 'Nitzer Ebb - Join In the Chant (Slam Rework)' (https://www.reddit.com/r/Techno/comments/1rmgm24/nitzer_ebb_join_in_the_chant_slam_rework/)",
+      "r/aves: Upvoted 'Train to Hive festival' (https://www.reddit.com/r/aves/comments/1rmjnja/train_to_hive_festival/)"
     ]
   }
 }
