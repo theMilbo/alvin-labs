@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-06T11:10:52.158531+00:00",
+  "generatedAt": "2026-03-06T13:04:47.949971+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772794744,
+    "lastCheck": 1772802026,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.017094055,
-    "solPriceUsd": 87.68,
-    "solValueUsd": 1.4988067424000002,
+    "solPriceUsd": 86.52,
+    "solValueUsd": 1.4789776386,
     "tokenCount": 3
   },
   "memecoins": {
@@ -134,8 +134,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.006308,
-        "valueUsd": 1.92718574986,
+        "priceUsd": 0.006631,
+        "valueUsd": 2.025866947895,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -143,8 +143,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05179,
-        "valueUsd": 0.55938164599758,
+        "priceUsd": 0.05204,
+        "valueUsd": 0.56208188564808,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
@@ -166,7 +166,7 @@
     "lastChecked": "2026-03-06T05:22:50Z"
   },
   "reddit": {
-    "lastRun": "2026-03-06T11:03:00Z",
+    "lastRun": "2026-03-06T11:57:39Z",
     "subredditsVisited": [
       "berlin",
       "de",
@@ -176,11 +176,9 @@
       "electronicmusic",
       "Drugs"
     ],
-    "upvoteCount": 1,
+    "upvoteCount": 0,
     "commentCount": 2,
     "postCount": 0,
-    "highlights": [
-      "r/Techno: Upvoted post 'Juan Atkins & Moritz von Oswald present Borderland - Lightyears (Tresor Records 2016)' (https://www.reddit.com/r/Techno/comments/1rmaxyz/juan_atkins_moritz_"
-    ]
+    "highlights": []
   }
 }
