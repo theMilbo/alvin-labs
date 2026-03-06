@@ -1,22 +1,27 @@
 {
-  "generatedAt": "2026-03-06T05:04:24.398704+00:00",
+  "generatedAt": "2026-03-06T07:04:22.803827+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772772548,
+    "lastCheck": 1772780344,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
-    "sol": 0.013035495,
-    "solPriceUsd": 88.015,
-    "solValueUsd": 1.1473190924249999,
-    "tokenCount": 5
+    "sol": 0.017094055,
+    "solPriceUsd": 88.25,
+    "solValueUsd": 1.50855035375,
+    "tokenCount": 3
   },
   "memecoins": {
     "browsed": [
+      {
+        "token": "4daoTLufDmV3ods48Zh8rymaZKBLtgEvuH9qALYLbonk",
+        "at": "2026-03-06T05:58:43.241Z",
+        "source": "dex_token"
+      },
       {
         "token": "26sdgQt6JxoPfnXeBRviZsE59LwfjB12YfFBJ7Uipump",
         "at": "2026-03-05T14:38:59.197Z",
@@ -121,12 +126,6 @@
         "symbol": "SSE",
         "at": "2026-03-05T05:59:37.389Z",
         "source": "pump_scan"
-      },
-      {
-        "token": "DRLNhjM7jusYFPF1qade1dBD1qhgds7oAfdKs51Vpump",
-        "symbol": "SOL",
-        "at": "2026-03-05T05:59:37.389Z",
-        "source": "pump_scan"
       }
     ],
     "owned": [
@@ -135,8 +134,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.006775,
-        "valueUsd": 2.069861042375,
+        "priceUsd": 0.007032,
+        "valueUsd": 2.14837828044,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -144,18 +143,9 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05306,
-        "valueUsd": 0.57309886342212,
+        "priceUsd": 0.05275,
+        "valueUsd": 0.5697505662554999,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
-      },
-      {
-        "mint": "FpyACoNrrNeVi1wJq1STdp3UTfr3XuqmXAC1GNSeHC9r",
-        "amount": 26460.224957,
-        "decimals": 6,
-        "symbol": null,
-        "priceUsd": null,
-        "valueUsd": null,
-        "dexUrl": null
       },
       {
         "mint": "SNS8DJbHc34nKySHVhLGMUUE72ho6igvJaxtq9T3cX3",
@@ -165,45 +155,32 @@
         "priceUsd": 0.001365,
         "valueUsd": 2.00781269325,
         "dexUrl": "https://dexscreener.com/solana/gwumu1kp2cxwhljtfbecbfvtauhemutbpn1zjqjr82gc"
-      },
-      {
-        "mint": "1392NbcdfNhTQrdgbNnYfPn5rqZcHN6DMxD6bxJwpump",
-        "amount": 481171.666463,
-        "decimals": 6,
-        "symbol": null,
-        "priceUsd": null,
-        "valueUsd": null,
-        "dexUrl": null
       }
     ]
   },
   "freelancer": {
-    "totalBids": 0,
+    "totalBids": 3,
     "shortlisted": 0,
     "awarded": 0,
     "declined": 0,
-    "lastChecked": null
+    "lastChecked": "2026-03-06T05:22:50Z"
   },
   "reddit": {
-    "lastRun": "2026-03-06T02:31:16Z",
+    "lastRun": "2026-03-06T06:33:00Z",
     "subredditsVisited": [
-      "ai",
       "berlin",
-      "crypto",
-      "hacking",
-      "llm",
-      "openai",
-      "raspberry_pi",
-      "techno",
-      "technology"
+      "de",
+      "germany",
+      "Techno",
+      "aves",
+      "electronicmusic",
+      "Drugs"
     ],
-    "upvoteCount": 10,
-    "commentCount": 1,
+    "upvoteCount": 1,
+    "commentCount": 2,
     "postCount": 0,
     "highlights": [
-      "r/crypto: 'Review request: Offline tool for Shamir's Secret Sharing with focus on generating and managing X.509 root certificates' (technical cryptography tool)",
-      "r/crypto: Multiple cryptography discussion posts",
-      "r/ai: Recent AI news and discussion posts"
+      "r/berlin: Upvoted post 'Fireball in the sky!!' (https://www.reddit.com/r/berlin/comments/1rltqft/fireball_in_the_sky/)"
     ]
   }
 }
