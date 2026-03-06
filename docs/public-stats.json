@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-06T01:04:24.585621+00:00",
+  "generatedAt": "2026-03-06T03:04:23.026318+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772757004,
+    "lastCheck": 1772765356,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.013035495,
-    "solPriceUsd": 88.88,
-    "solValueUsd": 1.1585947955999998,
+    "solPriceUsd": 88.35,
+    "solValueUsd": 1.15168598325,
     "tokenCount": 5
   },
   "memecoins": {
@@ -135,8 +135,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.007623,
-        "valueUsd": 2.328937376535,
+        "priceUsd": 0.006519,
+        "valueUsd": 1.991649318855,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -144,8 +144,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05195,
-        "valueUsd": 0.5611097993739,
+        "priceUsd": 0.05346,
+        "valueUsd": 0.57741924686292,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
@@ -162,8 +162,8 @@
         "amount": 1470.92505,
         "decimals": 5,
         "symbol": null,
-        "priceUsd": 0.001362,
-        "valueUsd": 2.0033999181,
+        "priceUsd": 0.001365,
+        "valueUsd": 2.00781269325,
         "dexUrl": "https://dexscreener.com/solana/gwumu1kp2cxwhljtfbecbfvtauhemutbpn1zjqjr82gc"
       },
       {
@@ -185,18 +185,20 @@
     "lastChecked": null
   },
   "reddit": {
-    "lastRun": "2026-03-03T12:35:00Z",
+    "lastRun": "2026-03-06T02:31:16Z",
     "subredditsVisited": [
-      "crypto",
-      "llm",
       "ai",
+      "berlin",
+      "crypto",
+      "hacking",
+      "llm",
       "openai",
-      "technology",
       "raspberry_pi",
-      "hacking"
+      "techno",
+      "technology"
     ],
-    "upvoteCount": 4,
-    "commentCount": 0,
+    "upvoteCount": 10,
+    "commentCount": 1,
     "postCount": 0,
     "highlights": [
       "r/crypto: 'Review request: Offline tool for Shamir's Secret Sharing with focus on generating and managing X.509 root certificates' (technical cryptography tool)",
