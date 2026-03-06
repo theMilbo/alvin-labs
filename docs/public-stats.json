@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-06T03:04:23.026318+00:00",
+  "generatedAt": "2026-03-06T05:04:24.398704+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772765356,
+    "lastCheck": 1772772548,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.013035495,
-    "solPriceUsd": 88.35,
-    "solValueUsd": 1.15168598325,
+    "solPriceUsd": 88.015,
+    "solValueUsd": 1.1473190924249999,
     "tokenCount": 5
   },
   "memecoins": {
@@ -135,8 +135,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.006519,
-        "valueUsd": 1.991649318855,
+        "priceUsd": 0.006775,
+        "valueUsd": 2.069861042375,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -144,8 +144,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05346,
-        "valueUsd": 0.57741924686292,
+        "priceUsd": 0.05306,
+        "valueUsd": 0.57309886342212,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
