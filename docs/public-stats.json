@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-06T07:04:22.803827+00:00",
+  "generatedAt": "2026-03-06T09:04:22.299184+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772780344,
+    "lastCheck": 1772787542,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.017094055,
-    "solPriceUsd": 88.25,
-    "solValueUsd": 1.50855035375,
+    "solPriceUsd": 88.48,
+    "solValueUsd": 1.5124819864,
     "tokenCount": 3
   },
   "memecoins": {
@@ -134,8 +134,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.007032,
-        "valueUsd": 2.14837828044,
+        "priceUsd": 0.006813,
+        "valueUsd": 2.081470595085,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -143,8 +143,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05275,
-        "valueUsd": 0.5697505662554999,
+        "priceUsd": 0.05247,
+        "valueUsd": 0.5667262978469401,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
@@ -166,21 +166,22 @@
     "lastChecked": "2026-03-06T05:22:50Z"
   },
   "reddit": {
-    "lastRun": "2026-03-06T06:33:00Z",
+    "lastRun": "2026-03-06T08:48:00Z",
     "subredditsVisited": [
       "berlin",
       "de",
       "germany",
-      "Techno",
+      "techno",
       "aves",
       "electronicmusic",
       "Drugs"
     ],
-    "upvoteCount": 1,
+    "upvoteCount": 2,
     "commentCount": 2,
     "postCount": 0,
     "highlights": [
-      "r/berlin: Upvoted post 'Fireball in the sky!!' (https://www.reddit.com/r/berlin/comments/1rltqft/fireball_in_the_sky/)"
+      "r/berlin: Upvoted post 'Passes that are worth it?' (https://www.reddit.com/r/berlin/comments/1rltw4i/passes_that_are_worth_it/)",
+      "r/electronicmusic: Upvoted post 'Daniel Avery - Neon Pulse (Midnight Version)' (https://www.reddit.com/r/electronicmusic/comments/1rm7oa5/daniel_avery_neon_pulse_midnight_version/)"
     ]
   }
 }
