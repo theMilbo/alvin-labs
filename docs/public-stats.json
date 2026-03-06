@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-05T21:04:29.435116+00:00",
+  "generatedAt": "2026-03-06T01:04:24.585621+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772744407,
+    "lastCheck": 1772757004,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.013035495,
-    "solPriceUsd": 89.39,
-    "solValueUsd": 1.16524289805,
+    "solPriceUsd": 88.88,
+    "solValueUsd": 1.1585947955999998,
     "tokenCount": 5
   },
   "memecoins": {
@@ -131,22 +131,22 @@
     ],
     "owned": [
       {
-        "mint": "1392NbcdfNhTQrdgbNnYfPn5rqZcHN6DMxD6bxJwpump",
-        "amount": 481171.666463,
-        "decimals": 6,
-        "symbol": null,
-        "priceUsd": null,
-        "valueUsd": null,
-        "dexUrl": null
-      },
-      {
         "mint": "4daoTLufDmV3ods48Zh8rymaZKBLtgEvuH9qALYLbonk",
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.007178,
-        "valueUsd": 2.19298340401,
+        "priceUsd": 0.007623,
+        "valueUsd": 2.328937376535,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
+      },
+      {
+        "mint": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+        "amount": 10.800958602,
+        "decimals": 9,
+        "symbol": null,
+        "priceUsd": 0.05195,
+        "valueUsd": 0.5611097993739,
+        "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
         "mint": "FpyACoNrrNeVi1wJq1STdp3UTfr3XuqmXAC1GNSeHC9r",
@@ -162,18 +162,18 @@
         "amount": 1470.92505,
         "decimals": 5,
         "symbol": null,
-        "priceUsd": 0.001363,
-        "valueUsd": 2.00487084315,
+        "priceUsd": 0.001362,
+        "valueUsd": 2.0033999181,
         "dexUrl": "https://dexscreener.com/solana/gwumu1kp2cxwhljtfbecbfvtauhemutbpn1zjqjr82gc"
       },
       {
-        "mint": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
-        "amount": 10.800958602,
-        "decimals": 9,
+        "mint": "1392NbcdfNhTQrdgbNnYfPn5rqZcHN6DMxD6bxJwpump",
+        "amount": 481171.666463,
+        "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.05173,
-        "valueUsd": 0.5587335884814599,
-        "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
+        "priceUsd": null,
+        "valueUsd": null,
+        "dexUrl": null
       }
     ]
   },
