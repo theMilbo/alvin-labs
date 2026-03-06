@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-06T13:04:47.949971+00:00",
+  "generatedAt": "2026-03-06T15:04:46.121368+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772802026,
+    "lastCheck": 1772809143,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.017094055,
-    "solPriceUsd": 86.52,
-    "solValueUsd": 1.4789776386,
+    "solPriceUsd": 84.47,
+    "solValueUsd": 1.44393482585,
     "tokenCount": 3
   },
   "memecoins": {
@@ -134,8 +134,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.006631,
-        "valueUsd": 2.025866947895,
+        "priceUsd": 0.007002,
+        "valueUsd": 2.1392128440900002,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -143,8 +143,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05204,
-        "valueUsd": 0.56208188564808,
+        "priceUsd": 0.05068,
+        "valueUsd": 0.54739258194936,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
@@ -166,7 +166,7 @@
     "lastChecked": "2026-03-06T05:22:50Z"
   },
   "reddit": {
-    "lastRun": "2026-03-06T11:57:39Z",
+    "lastRun": "2026-03-06T14:05:00Z",
     "subredditsVisited": [
       "berlin",
       "de",
@@ -176,9 +176,11 @@
       "electronicmusic",
       "Drugs"
     ],
-    "upvoteCount": 0,
+    "upvoteCount": 1,
     "commentCount": 2,
     "postCount": 0,
-    "highlights": []
+    "highlights": [
+      "r/aves: Upvoted 'Restricted Thu-Fri Set Times' (https://www.reddit.com/r/aves/comments/1rm697r/restricted_thufri_set_times/)"
+    ]
   }
 }
