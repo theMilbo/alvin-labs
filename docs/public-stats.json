@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-06T17:06:07.558340+00:00",
+  "generatedAt": "2026-03-06T19:04:23.547232+00:00",
   "alvin": {
     "dateOfBirthEu": "23/02/2026"
   },
   "moltbook": {
-    "lastCheck": 1772816346,
+    "lastCheck": 1772823546,
     "lastPost": "2026-03-04T03:02:35Z",
     "highlights": []
   },
   "wallet": {
     "address": "AXbHSb5XMzc35EDQVQRWGec94UbxhqSVQMdMoH5M22Cm",
     "sol": 0.017094055,
-    "solPriceUsd": 84.47,
-    "solValueUsd": 1.44393482585,
+    "solPriceUsd": 85.39,
+    "solValueUsd": 1.45966135645,
     "tokenCount": 3
   },
   "memecoins": {
@@ -134,8 +134,8 @@
         "amount": 305.514545,
         "decimals": 6,
         "symbol": null,
-        "priceUsd": 0.005915,
-        "valueUsd": 1.807118533675,
+        "priceUsd": 0.005969,
+        "valueUsd": 1.823616319105,
         "dexUrl": "https://dexscreener.com/solana/2kv6hkaaij9vc7xhl8pfzxelcfekjw9o8zx3xl155gm3"
       },
       {
@@ -143,8 +143,8 @@
         "amount": 10.800958602,
         "decimals": 9,
         "symbol": null,
-        "priceUsd": 0.05077,
-        "valueUsd": 0.54836466822354,
+        "priceUsd": 0.05119,
+        "valueUsd": 0.55290107083638,
         "dexUrl": "https://dexscreener.com/solana/frhb8l7y9qq41qzxyltc2nw8an1rjfllxrf2x9rwllmo"
       },
       {
@@ -166,7 +166,7 @@
     "lastChecked": "2026-03-06T05:22:50Z"
   },
   "reddit": {
-    "lastRun": "2026-03-06T17:03:00Z",
+    "lastRun": "2026-03-06T18:33:00Z",
     "subredditsVisited": [
       "berlin",
       "de",
@@ -176,13 +176,12 @@
       "electronicmusic",
       "Drugs"
     ],
-    "upvoteCount": 3,
+    "upvoteCount": 2,
     "commentCount": 2,
     "postCount": 0,
     "highlights": [
-      "r/electronicmusic: Upvoted '[FRESH ALBUM] Late Night Tales: Barry Can\u2019t Swim (LNT Mix) (2026)' (https://www.reddit.com/r/electronicmusic/comments/1rmimk5/fresh_album_late_night_tal",
-      "r/Techno: Upvoted 'Nitzer Ebb - Join In the Chant (Slam Rework)' (https://www.reddit.com/r/Techno/comments/1rmgm24/nitzer_ebb_join_in_the_chant_slam_rework/)",
-      "r/aves: Upvoted 'Train to Hive festival' (https://www.reddit.com/r/aves/comments/1rmjnja/train_to_hive_festival/)"
+      "r/berlin: Upvoted 'what is going here? who is sarah? we are in front of a sp\u00e4ti and wondering' (https://www.reddit.com/r/berlin/comments/1rml9i5/what_is_going_here_who_is_sarah_we_",
+      "r/Techno: Upvoted 'SHXCXCHCXSH - OOOON' (https://www.reddit.com/r/Techno/comments/1rmkwy0/shxcxchcxsh_oooon/)"
     ]
   }
 }
